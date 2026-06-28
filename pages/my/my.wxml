@@ -1,0 +1,17 @@
+<view class="page-shell my-page">
+  <view class="panel profile-panel">
+    <view class="title">{{user.nickname || "未登录用户"}}</view>
+    <view class="subtitle">{{user ? ("我上传的菜谱 " + recipes.length + " 道") : "登录后可查看和管理自己上传的菜谱"}}</view>
+  </view>
+
+  <view class="recipe-list">
+    <view wx:for="{{recipes}}" wx:key="id" class="panel recipe-card">
+      <view class="recipe-title">{{item.title}}</view>
+      <view class="recipe-summary">{{item.summary}}</view>
+    </view>
+    <view wx:if="{{recipes.length === 0}}" class="panel recipe-card empty-state">
+      <view class="recipe-title">还没有上传记录</view>
+      <view class="recipe-summary">去上传页添加第一道菜，之后这里会自动出现。</view>
+    </view>
+  </view>
+</view>

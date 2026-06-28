@@ -1,0 +1,60 @@
+.upload-page {
+  padding: 32rpx;
+}
+
+.upload-panel {
+  padding: 32rpx;
+}
+
+.subtitle {
+  margin-top: 12rpx;
+  color: #666666;
+  line-height: 1.6;
+}
+
+.upload-box {
+  height: 260rpx;
+  margin-top: 24rpx;
+  border-radius: 24rpx;
+  border: 1rpx dashed #e7bfd0;
+  background: linear-gradient(135deg, #fff1f6, #ffe2ec);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #444444;
+  overflow: hidden;
+}
+
+.upload-preview {
+  width: 100%;
+  height: 100%;
+}
+
+.secondary-button {
+  margin-top: 20rpx;
+}
+
+.ai-tip {
+  margin-top: 16rpx;
+  color: #666666;
+  font-size: 24rpx;
+}
+
+.input {
+  display: block;
+  margin-top: 20rpx;
+  padding: 20rpx 24rpx;
+  border: 1rpx solid #eed8e2;
+  border-radius: 20rpx;
+  background: #ffffff;
+}
+
+.error {
+  margin-top: 16rpx;
+  color: #d34b6b;
+  font-size: 24rpx;
+}
+
+.submit-button {
+  margin-top: 24rpx;
+}

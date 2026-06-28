@@ -1,0 +1,13 @@
+{
+  "name": "songsong-menu",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "test": "jest --runInBand"
+  },
+  "devDependencies": {
+    "jest-environment-jsdom": "^29.7.0",
+    "jest": "^29.7.0",
+    "miniprogram-simulate": "^1.6.1"
+  }
+}

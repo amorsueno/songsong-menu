@@ -1,0 +1,30 @@
+page {
+  background: #ffffff;
+  color: #111111;
+  font-family: "PingFang SC", "Helvetica Neue", Arial, sans-serif;
+}
+
+.page-shell {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #fff7fb 0%, #ffffff 220rpx);
+}
+
+.panel {
+  background: #ffffff;
+  border: 1rpx solid #f2dfe8;
+  border-radius: 32rpx;
+  box-shadow: 0 12rpx 40rpx rgba(235, 192, 210, 0.14);
+}
+
+.primary-button {
+  background: #111111;
+  color: #ffffff;
+  border-radius: 24rpx;
+}
+
+.secondary-button {
+  background: #fff4f8;
+  color: #111111;
+  border: 1rpx solid #f2dce6;
+  border-radius: 24rpx;
+}

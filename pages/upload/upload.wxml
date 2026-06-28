@@ -1,0 +1,18 @@
+<view class="page-shell upload-page">
+  <view class="panel upload-panel">
+    <view class="title">上传一道新菜</view>
+    <view class="subtitle">先上传成品图，再决定是手动填写还是交给 AI 辅助识别。</view>
+    <view class="upload-box" bindtap="onChooseImage">
+      <image wx:if="{{form.photoUrl}}" class="upload-preview" src="{{form.photoUrl}}" mode="aspectFill" />
+      <view wx:else>点击上传菜品照片</view>
+    </view>
+    <button class="secondary-button" loading="{{recognizing}}" bindtap="onRecognizeTap">
+      AI识别菜名和食材
+    </button>
+    <view wx:if="{{aiMessage}}" class="ai-tip">{{aiMessage}}</view>
+    <input class="input" data-field="name" placeholder="菜名" bindinput="onInput" value="{{form.name}}" />
+    <input class="input" data-field="ingredients" placeholder="食材，例如：虾仁、鸡蛋、葱花" bindinput="onInput" value="{{form.ingredients}}" />
+    <view wx:if="{{errorMessage}}" class="error">{{errorMessage}}</view>
+    <button class="primary-button submit-button" loading="{{submitting}}" bindtap="onSubmit">发布菜谱</button>
+  </view>
+</view>

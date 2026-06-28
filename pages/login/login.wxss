@@ -1,0 +1,48 @@
+.login-page {
+  padding: 48rpx 32rpx;
+}
+
+.login-panel {
+  padding: 40rpx 32rpx;
+}
+
+.eyebrow {
+  color: #c98da7;
+  font-size: 22rpx;
+  letter-spacing: 4rpx;
+}
+
+.title {
+  margin-top: 12rpx;
+  font-size: 44rpx;
+  font-weight: 700;
+}
+
+.hero {
+  height: 280rpx;
+  margin-top: 24rpx;
+  border-radius: 24rpx;
+  background: linear-gradient(135deg, #fff1f6, #ffe3ee);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #444444;
+}
+
+.input {
+  margin-top: 24rpx;
+  padding: 20rpx 24rpx;
+  border: 1rpx solid #eed8e2;
+  border-radius: 20rpx;
+  background: #ffffff;
+}
+
+.error {
+  margin-top: 16rpx;
+  color: #d34b6b;
+  font-size: 24rpx;
+}
+
+.login-button {
+  margin-top: 24rpx;
+}
