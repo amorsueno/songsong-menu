@@ -85,8 +85,11 @@ Create these two collections in Tencent Cloudbase:
 ## Suggested setup order
 
 1. 运行 `npm run generate:cloudbase`
-2. 创建 `users` 和 `recipes` 集合
-3. 根据 `cloudbase/indexes.json` 配置索引
-4. 根据 `cloudbase/permissions.json` 配置权限
-5. 部署 `login`、`getRecipes`、`createRecipe`、`getMyRecipes`、`recognizeRecipe`
-6. 用微信开发者工具真机调试登录、上传、浏览和我的菜谱流程
+2. 运行 `npm run doctor:cloudbase`
+3. 运行 `npm run generate:troubleshooting`
+4. 创建 `users` 和 `recipes` 集合
+5. 根据 `cloudbase/indexes.json` 配置索引
+6. 根据 `cloudbase/permissions.json` 配置权限
+7. 部署 `login`、`getRecipes`、`createRecipe`、`getMyRecipes`、`recognizeRecipe`
+8. 用微信开发者工具真机调试登录、上传、浏览和我的菜谱流程
+9. 如果出现异常，优先查看 `docs/cloudbase/devtools-troubleshooting.md`
