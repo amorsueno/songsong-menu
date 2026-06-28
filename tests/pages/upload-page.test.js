@@ -34,6 +34,7 @@ describe("upload page", () => {
           this.data[key] = value;
         });
       },
+      onCategoryTap: pageConfig.onCategoryTap,
       onRecognizeTap: pageConfig.onRecognizeTap,
       onSubmit: pageConfig.onSubmit
     };
@@ -73,7 +74,8 @@ describe("upload page", () => {
       buildRecipePayload = jest.fn((form) => ({
         name: form.name.trim(),
         ingredients: form.ingredients.trim(),
-        photoUrl: form.photoUrl
+        photoUrl: form.photoUrl,
+        category: form.category || "家常菜"
       }));
 
       return {
@@ -106,8 +108,35 @@ describe("upload page", () => {
     expect(pageConfig.data.form).toEqual({
       name: "",
       ingredients: "",
-      photoUrl: ""
+      photoUrl: "",
+      category: "家常菜"
     });
+  });
+
+  test("page exposes available upload categories", () => {
+    require("../../pages/upload/upload");
+
+    expect(pageConfig.data.categories).toEqual([
+      "家常菜",
+      "汤羹",
+      "快手菜",
+      "轻食"
+    ]);
+  });
+
+  test("category tap updates current recipe category", () => {
+    require("../../pages/upload/upload");
+    const page = createPageInstance();
+
+    page.onCategoryTap.call(page, {
+      currentTarget: {
+        dataset: {
+          category: "轻食"
+        }
+      }
+    });
+
+    expect(page.data.form.category).toBe("轻食");
   });
 
   test("page starts with empty ai suggestion state", () => {
@@ -177,7 +206,8 @@ describe("upload page", () => {
     page.data.form = {
       name: "手撕包菜",
       ingredients: "包菜、蒜末",
-      photoUrl: "cloud://demo/recipe.jpg"
+      photoUrl: "cloud://demo/recipe.jpg",
+      category: "快手菜"
     };
 
     recognizeRecipeFromImage.mockRejectedValue(new Error("network"));
@@ -193,7 +223,8 @@ describe("upload page", () => {
     expect(buildRecipePayload).toHaveBeenCalledWith({
       name: "手撕包菜",
       ingredients: "包菜、蒜末",
-      photoUrl: "cloud://demo/recipe.jpg"
+      photoUrl: "cloud://demo/recipe.jpg",
+      category: "快手菜"
     });
     expect(wx.cloud.callFunction).toHaveBeenCalledWith({
       name: "createRecipe",
@@ -201,6 +232,7 @@ describe("upload page", () => {
         name: "手撕包菜",
         ingredients: "包菜、蒜末",
         photoUrl: "cloud://demo/recipe.jpg",
+        category: "快手菜",
         aiNameSuggestion: "",
         aiIngredientsSuggestion: ""
       }

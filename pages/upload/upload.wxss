@@ -51,6 +51,35 @@
   border: 1rpx solid #f3dce5;
 }
 
+.category-label {
+  margin-top: 20rpx;
+  font-size: 26rpx;
+  font-weight: 600;
+  color: #222222;
+}
+
+.category-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16rpx;
+  margin-top: 16rpx;
+}
+
+.category-chip {
+  padding: 14rpx 24rpx;
+  border-radius: 999rpx;
+  background: #fff4f8;
+  border: 1rpx solid #f2dce6;
+  color: #111111;
+  font-size: 24rpx;
+}
+
+.category-chip--active {
+  background: #111111;
+  border-color: #111111;
+  color: #ffffff;
+}
+
 .input {
   display: block;
   margin-top: 20rpx;

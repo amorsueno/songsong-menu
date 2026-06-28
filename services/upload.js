@@ -22,7 +22,8 @@ function buildRecipePayload(form) {
   return {
     name: form.name.trim(),
     ingredients: normalizeIngredients(form.ingredients),
-    photoUrl: form.photoUrl
+    photoUrl: form.photoUrl,
+    category: form.category || "家常菜"
   };
 }
 

@@ -11,6 +11,18 @@
     </button>
     <view class="ai-note">AI 结果仅作填写建议，你仍可手动修改菜名和食材。</view>
     <view wx:if="{{aiMessage}}" class="ai-tip">{{aiMessage}}</view>
+    <view class="category-label">菜谱分类</view>
+    <view class="category-row">
+      <view
+        wx:for="{{categories}}"
+        wx:key="*this"
+        class="category-chip {{form.category === item ? 'category-chip--active' : ''}}"
+        data-category="{{item}}"
+        bindtap="onCategoryTap"
+      >
+        {{item}}
+      </view>
+    </view>
     <input class="input" data-field="name" placeholder="菜名" bindinput="onInput" value="{{form.name}}" />
     <input class="input" data-field="ingredients" placeholder="食材，例如：虾仁、鸡蛋、葱花" bindinput="onInput" value="{{form.ingredients}}" />
     <view wx:if="{{errorMessage}}" class="error">{{errorMessage}}</view>

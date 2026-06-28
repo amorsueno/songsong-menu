@@ -2,13 +2,18 @@ const { requireLogin } = require("../../services/auth");
 const { validateRecipePayload } = require("../../utils/validators");
 const { chooseRecipeImage, uploadRecipeImage, buildRecipePayload } = require("../../services/upload");
 const { recognizeRecipeFromImage, mapRecognitionResult } = require("../../services/ai");
+const { RECIPE_CATEGORIES } = require("../../utils/constants");
+
+const UPLOAD_CATEGORIES = RECIPE_CATEGORIES.filter((item) => item !== "全部");
 
 Page({
   data: {
+    categories: UPLOAD_CATEGORIES,
     form: {
       name: "",
       ingredients: "",
-      photoUrl: ""
+      photoUrl: "",
+      category: UPLOAD_CATEGORIES[0]
     },
     aiSuggestion: {
       name: "",
@@ -30,6 +35,12 @@ Page({
     const field = e.currentTarget.dataset.field;
     this.setData({
       [`form.${field}`]: e.detail.value
+    });
+  },
+
+  onCategoryTap(e) {
+    this.setData({
+      "form.category": e.currentTarget.dataset.category
     });
   },
 
@@ -88,7 +99,12 @@ Page({
         }
       });
       this.setData({
-        form: { name: "", ingredients: "", photoUrl: "" },
+        form: {
+          name: "",
+          ingredients: "",
+          photoUrl: "",
+          category: UPLOAD_CATEGORIES[0]
+        },
         aiSuggestion: { name: "", ingredients: "", isPartial: false },
         submitting: false,
         errorMessage: "",
