@@ -22,13 +22,25 @@ npm install
 npm run install:cloudfunctions
 ```
 
-2. 用微信开发者工具打开项目根目录：
+2. 生成云开发集合、索引和权限模板：
 
-```text
-/Users/yu/Documents/songsong-menu
+```bash
+npm run generate:cloudbase
 ```
 
-3. 在微信开发者工具中开启云开发，并部署以下云函数目录：
+这会生成：
+
+- `cloudbase/collections.json`
+- `cloudbase/indexes.json`
+- `cloudbase/permissions.json`
+
+3. 用微信开发者工具打开项目根目录：
+
+```text
+/Users/yu/Documents/GitHub/songsong-menu
+```
+
+4. 在微信开发者工具中开启云开发，并部署以下云函数目录：
 
 - `cloudfunctions/login`
 - `cloudfunctions/getRecipes`
@@ -37,6 +49,12 @@ npm run install:cloudfunctions
 - `cloudfunctions/recognizeRecipe`
 
 每个云函数目录都已包含自己的 `package.json`。如果微信开发者工具提示安装依赖，进入对应目录执行依赖安装后再部署即可。
+
+5. 在云开发控制台中创建集合、索引并配置权限：
+
+- 按 `cloudbase/collections.json` 创建集合和字段约定
+- 按 `cloudbase/indexes.json` 创建索引
+- 按 `cloudbase/permissions.json` 配置集合权限
 
 环境变量示例见：
 

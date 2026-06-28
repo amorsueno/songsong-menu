@@ -1,0 +1,42 @@
+{
+  "indexes": [
+    {
+      "collectionName": "users",
+      "fields": [
+        {
+          "name": "openId",
+          "order": "asc"
+        }
+      ],
+      "note": "用于按 openId 查询用户，建议在控制台设置唯一约束"
+    },
+    {
+      "collectionName": "recipes",
+      "fields": [
+        {
+          "name": "category",
+          "order": "asc"
+        },
+        {
+          "name": "createdAt",
+          "order": "desc"
+        }
+      ],
+      "note": "用于发现页分类浏览"
+    },
+    {
+      "collectionName": "recipes",
+      "fields": [
+        {
+          "name": "ownerUserId",
+          "order": "asc"
+        },
+        {
+          "name": "createdAt",
+          "order": "desc"
+        }
+      ],
+      "note": "用于我的菜谱列表"
+    }
+  ]
+}

@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "test": "jest --runInBand",
-    "install:cloudfunctions": "bash scripts/install-cloudfunctions.sh"
+    "install:cloudfunctions": "bash scripts/install-cloudfunctions.sh",
+    "generate:cloudbase": "node scripts/generate-cloudbase-config.js"
   },
   "devDependencies": {
     "jest-environment-jsdom": "^29.7.0",

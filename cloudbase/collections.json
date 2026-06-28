@@ -1,0 +1,27 @@
+{
+  "collections": [
+    {
+      "name": "users",
+      "fields": [
+        "openId",
+        "nickname",
+        "avatarUrl",
+        "createdAt"
+      ]
+    },
+    {
+      "name": "recipes",
+      "fields": [
+        "ownerUserId",
+        "name",
+        "ingredientsText",
+        "photoUrl",
+        "aiNameSuggestion",
+        "aiIngredientsSuggestion",
+        "category",
+        "createdAt",
+        "updatedAt"
+      ]
+    }
+  ]
+}

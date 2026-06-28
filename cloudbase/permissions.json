@@ -1,0 +1,14 @@
+{
+  "permissions": [
+    {
+      "collectionName": "users",
+      "read": "仅创建者和云函数可读",
+      "write": "仅云函数可写"
+    },
+    {
+      "collectionName": "recipes",
+      "read": "所有登录用户可读，云函数可读写",
+      "write": "仅云函数可写"
+    }
+  ]
+}
