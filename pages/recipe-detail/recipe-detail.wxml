@@ -16,7 +16,15 @@
     <view class="panel detail-panel">
       <view class="detail-meta">{{recipe.category}}</view>
       <view class="detail-title">{{recipe.title}}</view>
-      <button wx:if="{{canEdit}}" class="secondary-button detail-button-inline" data-id="{{recipe.id}}" bindtap="onEditTap">编辑菜谱</button>
+      <view wx:if="{{recipe.createdAtText || recipe.updatedAtText}}" class="detail-date-row">
+        <view wx:if="{{recipe.createdAtText}}" class="detail-date">{{recipe.createdAtText}}</view>
+        <view wx:if="{{recipe.updatedAtText}}" class="detail-date">{{recipe.updatedAtText}}</view>
+      </view>
+      <view wx:if="{{canEdit}}" class="detail-actions">
+        <button class="secondary-button detail-button-inline" data-id="{{recipe.id}}" bindtap="onEditTap">编辑菜谱</button>
+        <button class="detail-danger-button" loading="{{deleting}}" bindtap="onDeleteTap">删除菜谱</button>
+      </view>
+      <view wx:if="{{actionError}}" class="detail-action-error">{{actionError}}</view>
       <view class="detail-section-title">食材</view>
       <view class="detail-text">{{recipe.ingredients}}</view>
     </view>

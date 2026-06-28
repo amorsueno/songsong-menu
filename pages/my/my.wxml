@@ -2,6 +2,16 @@
   <view class="panel profile-panel">
     <view class="title">{{user.nickname || "未登录用户"}}</view>
     <view class="subtitle">{{user ? ("我上传的菜谱 " + recipes.length + " 道") : "登录后可查看和管理自己上传的菜谱"}}</view>
+    <button class="secondary-button logout-button" bindtap="onLogoutTap">退出登录</button>
+  </view>
+
+  <view wx:if="{{featuredRecipe}}" class="panel my-hero" data-id="{{featuredRecipe.id}}" bindtap="onRecipeTap">
+    <image class="my-hero-image" src="{{featuredRecipe.photoUrl}}" mode="aspectFill" />
+    <view class="my-hero-overlay">
+      <view class="my-hero-badge">最新上传</view>
+      <view class="my-hero-title">{{featuredRecipe.title}}</view>
+      <view class="my-hero-copy">{{featuredRecipe.summary}}</view>
+    </view>
   </view>
 
   <view class="recipe-list">
@@ -17,8 +27,11 @@
     </view>
 
     <view wx:for="{{recipes}}" wx:key="id" class="panel recipe-card" data-id="{{item.id}}" bindtap="onRecipeTap">
-      <view class="recipe-title">{{item.title}}</view>
-      <view class="recipe-summary">{{item.summary}}</view>
+      <image class="recipe-image" src="{{item.photoUrl}}" mode="aspectFill" />
+      <view class="recipe-body">
+        <view class="recipe-title">{{item.title}}</view>
+        <view class="recipe-summary">{{item.summary}}</view>
+      </view>
     </view>
 
     <view wx:if="{{!loading && !errorText && recipes.length === 0}}" class="panel recipe-card empty-state">

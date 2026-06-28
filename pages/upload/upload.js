@@ -57,7 +57,15 @@ Page({
 
   onShow() {
     const app = getApp();
-    requireLogin(app, "/pages/upload/upload");
+    requireLogin(app, this.getLoginRedirect());
+  },
+
+  getLoginRedirect() {
+    if (this.data.mode === "edit" && this.data.recipeId) {
+      return `/pages/upload/upload?mode=edit&recipeId=${this.data.recipeId}`;
+    }
+
+    return "/pages/upload/upload";
   },
 
   onInput(e) {

@@ -1,4 +1,4 @@
-const { fetchRecipeDetail, mapRecipeDetail } = require("../../services/recipe");
+const { deleteRecipe, fetchRecipeDetail, mapRecipeDetail } = require("../../services/recipe");
 
 Page({
   data: {
@@ -6,7 +6,9 @@ Page({
     recipe: null,
     loading: false,
     errorText: "",
-    canEdit: false
+    canEdit: false,
+    deleting: false,
+    actionError: ""
   },
 
   async onLoad(query) {
@@ -19,7 +21,8 @@ Page({
   async loadRecipe() {
     this.setData({
       loading: true,
-      errorText: ""
+      errorText: "",
+      actionError: ""
     });
 
     try {
@@ -49,5 +52,36 @@ Page({
     wx.navigateTo({
       url: `/pages/upload/upload?mode=edit&recipeId=${e.currentTarget.dataset.id}`
     });
+  },
+
+  async onDeleteTap() {
+    const modalResult = await wx.showModal({
+      title: "删除菜谱",
+      content: "删除后将无法恢复，确认删除这道菜谱吗？"
+    });
+
+    if (!modalResult.confirm) {
+      return;
+    }
+
+    this.setData({
+      deleting: true,
+      actionError: ""
+    });
+
+    try {
+      await deleteRecipe(this.data.recipeId);
+      wx.switchTab({
+        url: "/pages/my/my"
+      });
+    } catch (error) {
+      this.setData({
+        actionError: "删除失败，请稍后重试"
+      });
+    } finally {
+      this.setData({
+        deleting: false
+      });
+    }
   }
 });

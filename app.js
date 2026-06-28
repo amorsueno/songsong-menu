@@ -1,8 +1,12 @@
+const { loadStoredUser } = require("./services/auth");
+
 App({
   onLaunch() {
     if (wx.cloud) {
       wx.cloud.init({ traceUser: true });
     }
+
+    this.globalData.user = loadStoredUser();
   },
   globalData: {
     user: null,

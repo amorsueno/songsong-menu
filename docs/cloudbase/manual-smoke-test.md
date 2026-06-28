@@ -6,7 +6,7 @@
 
 1. 运行 `npm run generate:cloudbase`
 2. 运行 `npm run doctor:cloudbase`
-3. 在微信开发者工具中部署 5 个云函数
+3. 在微信开发者工具中部署 8 个云函数
 
 ## Smoke test flow
 
@@ -47,6 +47,18 @@
   - 能看到当前登录用户上传的菜谱
   - 菜谱数量与 `recipes` 集合里当前用户的记录一致
 
+### 5. 编辑与删除菜谱
+
+- 从我的页进入任意一条自己上传的菜谱详情
+- 点击 `编辑菜谱`，修改菜名或食材后保存
+- 预期结果：
+  - 成功回到菜谱详情页
+  - 详情页展示更新后的内容
+- 再点击 `删除菜谱`
+- 预期结果：
+  - 确认后返回我的页
+  - `recipes` 集合中对应记录已被删除
+
 ## Suggested data checks
 
 ### `users`
@@ -75,4 +87,5 @@
 - 如果发现页加载失败，先检查 `getRecipes` 是否已部署到当前云环境
 - 如果我的页加载失败，先检查当前账号是否已登录且 `getMyRecipes` 已部署
 - 如果上传失败，先检查 `createRecipe` 是否已部署，并确认图片已成功上传到云存储
+- 如果编辑或删除失败，先检查 `getRecipeDetail`、`updateRecipe`、`deleteRecipe` 是否已部署到当前云环境
 - 如果 AI 一直返回空建议，优先检查 `AI_RECOGNIZE_ENDPOINT` 和 `AI_RECOGNIZE_API_KEY`

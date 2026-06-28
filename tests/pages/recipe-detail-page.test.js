@@ -1,5 +1,6 @@
 describe("recipe detail page", () => {
   let pageConfig;
+  let deleteRecipe;
   let fetchRecipeDetail;
   let mapRecipeDetail;
 
@@ -13,6 +14,7 @@ describe("recipe detail page", () => {
         };
       },
       loadRecipe: pageConfig.loadRecipe,
+      onDeleteTap: pageConfig.onDeleteTap,
       onLoad: pageConfig.onLoad
     };
   }
@@ -26,7 +28,9 @@ describe("recipe detail page", () => {
     };
 
     global.wx = {
-      navigateTo: jest.fn()
+      navigateTo: jest.fn(),
+      showModal: jest.fn(),
+      switchTab: jest.fn()
     };
 
     global.getApp = jest.fn(() => ({
@@ -38,14 +42,18 @@ describe("recipe detail page", () => {
     }));
 
     jest.doMock("../../services/recipe", () => {
+      deleteRecipe = jest.fn();
       fetchRecipeDetail = jest.fn();
       mapRecipeDetail = jest.fn((item) => ({
         id: item._id,
         title: item.name,
-        ownerUserId: item.ownerUserId
+        ownerUserId: item.ownerUserId,
+        createdAtText: item.createdAtText,
+        updatedAtText: item.updatedAtText
       }));
 
       return {
+        deleteRecipe,
         fetchRecipeDetail,
         mapRecipeDetail
       };
@@ -66,7 +74,9 @@ describe("recipe detail page", () => {
         item: {
           _id: "recipe-1",
           name: "糖醋排骨",
-          ownerUserId: "owner-1"
+          ownerUserId: "owner-1",
+          createdAtText: "创建于 2026.06.28",
+          updatedAtText: "更新于 2026.06.29"
         }
       }
     });
@@ -78,7 +88,9 @@ describe("recipe detail page", () => {
     expect(page.data.recipe).toEqual({
       id: "recipe-1",
       title: "糖醋排骨",
-      ownerUserId: "owner-1"
+      ownerUserId: "owner-1",
+      createdAtText: "创建于 2026.06.28",
+      updatedAtText: "更新于 2026.06.29"
     });
     expect(page.data.canEdit).toBe(true);
     expect(page.data.errorText).toBe("");
@@ -112,5 +124,52 @@ describe("recipe detail page", () => {
     expect(wx.navigateTo).toHaveBeenCalledWith({
       url: "/pages/upload/upload?mode=edit&recipeId=recipe-1"
     });
+  });
+
+  test("onDeleteTap confirms deletion and returns to my page after success", async () => {
+    require("../../pages/recipe-detail/recipe-detail");
+    const page = createPageInstance();
+    page.data.recipeId = "recipe-1";
+    deleteRecipe.mockResolvedValue({ result: { recipeId: "recipe-1" } });
+    wx.showModal.mockResolvedValue({ confirm: true, cancel: false });
+
+    await page.onDeleteTap.call(page);
+
+    expect(wx.showModal).toHaveBeenCalledWith({
+      title: "删除菜谱",
+      content: "删除后将无法恢复，确认删除这道菜谱吗？"
+    });
+    expect(deleteRecipe).toHaveBeenCalledWith("recipe-1");
+    expect(wx.switchTab).toHaveBeenCalledWith({
+      url: "/pages/my/my"
+    });
+    expect(page.data.actionError).toBe("");
+    expect(page.data.deleting).toBe(false);
+  });
+
+  test("onDeleteTap keeps detail page when user cancels", async () => {
+    require("../../pages/recipe-detail/recipe-detail");
+    const page = createPageInstance();
+    page.data.recipeId = "recipe-1";
+    wx.showModal.mockResolvedValue({ confirm: false, cancel: true });
+
+    await page.onDeleteTap.call(page);
+
+    expect(deleteRecipe).not.toHaveBeenCalled();
+    expect(wx.switchTab).not.toHaveBeenCalled();
+  });
+
+  test("onDeleteTap shows inline error when deletion fails", async () => {
+    require("../../pages/recipe-detail/recipe-detail");
+    const page = createPageInstance();
+    page.data.recipeId = "recipe-1";
+    deleteRecipe.mockRejectedValue(new Error("permission"));
+    wx.showModal.mockResolvedValue({ confirm: true, cancel: false });
+
+    await page.onDeleteTap.call(page);
+
+    expect(page.data.actionError).toBe("删除失败，请稍后重试");
+    expect(page.data.deleting).toBe(false);
+    expect(wx.switchTab).not.toHaveBeenCalled();
   });
 });

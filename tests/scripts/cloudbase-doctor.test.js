@@ -17,7 +17,10 @@ describe("cloudbase doctor", () => {
       "getRecipes",
       "createRecipe",
       "getMyRecipes",
-      "recognizeRecipe"
+      "recognizeRecipe",
+      "getRecipeDetail",
+      "updateRecipe",
+      "deleteRecipe"
     ]);
     expect(REQUIRED_AI_ENV_VARS).toEqual([
       "AI_RECOGNIZE_ENDPOINT",
@@ -50,6 +53,9 @@ describe("cloudbase doctor", () => {
         { label: "cloudfunctions/createRecipe/package.json", ok: true },
         { label: "cloudfunctions/getMyRecipes/package.json", ok: false },
         { label: "cloudfunctions/recognizeRecipe/package.json", ok: true },
+        { label: "cloudfunctions/getRecipeDetail/package.json", ok: true },
+        { label: "cloudfunctions/updateRecipe/package.json", ok: true },
+        { label: "cloudfunctions/deleteRecipe/package.json", ok: true },
         { label: "env.AI_RECOGNIZE_ENDPOINT", ok: false },
         { label: "env.AI_RECOGNIZE_API_KEY", ok: false }
       ],
@@ -75,7 +81,7 @@ describe("cloudbase doctor", () => {
     expect(report.warnings).toEqual([]);
     expect(report.nextSteps).toEqual([
       "可进入微信开发者工具，按 cloudbase 模板创建集合、索引和权限",
-      "部署 5 个云函数后，执行登录、上传、发现页、我的菜谱四条主流程验收"
+      "部署 8 个云函数后，执行登录、上传、发现页、我的菜谱、详情编辑删除五条主流程验收"
     ]);
   });
 });

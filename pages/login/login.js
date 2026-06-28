@@ -1,4 +1,4 @@
-const { loginWithWechat, saveUser } = require("../../services/auth");
+const { isTabPage, loginWithWechat, saveUser } = require("../../services/auth");
 const { validateNickname } = require("../../utils/validators");
 
 Page({
@@ -12,7 +12,7 @@ Page({
 
   onLoad(query) {
     this.setData({
-      redirect: query.redirect || "/pages/discover/discover"
+      redirect: query.redirect ? decodeURIComponent(query.redirect) : "/pages/discover/discover"
     });
   },
 
@@ -32,8 +32,8 @@ Page({
       const app = getApp();
       const result = await loginWithWechat(this.data.nickname);
       saveUser(app, result.result.user);
-      if (this.data.redirect === "/pages/discover/discover") {
-        wx.switchTab({ url: this.data.redirect });
+      if (isTabPage(this.data.redirect)) {
+        wx.switchTab({ url: this.data.redirect.split("?")[0] });
       } else {
         wx.redirectTo({ url: this.data.redirect });
       }

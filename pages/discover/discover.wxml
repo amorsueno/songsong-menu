@@ -3,7 +3,15 @@
     <view class="eyebrow">SONGSONG MENU</view>
     <view class="title">今天想做哪一道菜</view>
     <view class="subtitle">把家常菜整理得更清爽，也让每天吃什么更容易决定。</view>
-    <view class="hero">
+    <view wx:if="{{featuredRecipe}}" class="hero hero--featured">
+      <image class="hero-image" src="{{featuredRecipe.photoUrl}}" mode="aspectFill" />
+      <view class="hero-overlay">
+        <view class="hero-badge">最新收录</view>
+        <view class="hero-title">{{featuredRecipe.title}}</view>
+        <view class="hero-copy">{{featuredRecipe.summary}}</view>
+      </view>
+    </view>
+    <view wx:else class="hero">
       <view class="hero-badge">今日推荐</view>
       <view class="hero-title">从一张照片开始，慢慢建立你的菜谱库</view>
     </view>
@@ -37,8 +45,10 @@
 
     <view wx:for="{{recipes}}" wx:key="id" class="panel recipe-card" data-id="{{item.id}}" bindtap="onRecipeTap">
       <image class="recipe-image" src="{{item.photoUrl}}" mode="aspectFill" />
-      <view class="recipe-title">{{item.title}}</view>
-      <view class="recipe-summary">{{item.summary}}</view>
+      <view class="recipe-body">
+        <view class="recipe-title">{{item.title}}</view>
+        <view class="recipe-summary">{{item.summary}}</view>
+      </view>
     </view>
 
     <view wx:if="{{!loading && !errorText && recipes.length === 0}}" class="panel empty-card">

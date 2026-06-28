@@ -4,7 +4,14 @@ global.wx = {
   }
 };
 
-const { fetchRecipes, fetchMyRecipes, fetchRecipeDetail, mapRecipeCard, mapRecipeDetail } = require("../../services/recipe");
+const {
+  deleteRecipe,
+  fetchRecipes,
+  fetchMyRecipes,
+  fetchRecipeDetail,
+  mapRecipeCard,
+  mapRecipeDetail
+} = require("../../services/recipe");
 
 describe("recipe service", () => {
   test("fetchRecipes requests cloud function with category", async () => {
@@ -50,27 +57,40 @@ describe("recipe service", () => {
     });
   });
 
+  test("deleteRecipe requests delete cloud function with recipeId", async () => {
+    wx.cloud.callFunction.mockResolvedValueOnce({ result: { recipeId: "recipe-1" } });
+    await deleteRecipe("recipe-1");
+    expect(wx.cloud.callFunction).toHaveBeenCalledWith({
+      name: "deleteRecipe",
+      data: { recipeId: "recipe-1" }
+    });
+  });
+
   test("mapRecipeDetail returns detail fields", () => {
     expect(
       mapRecipeDetail({
         _id: "r1",
         name: "番茄牛腩",
         ingredientsText: "牛腩、番茄、洋葱",
-      photoUrl: "cloud://demo/image.jpg",
-      category: "家常菜",
-      ownerUserId: "owner-1",
-      aiNameSuggestion: "番茄牛腩",
-      aiIngredientsSuggestion: "牛腩、番茄、洋葱"
-    })
-  ).toEqual({
-    id: "r1",
+        photoUrl: "cloud://demo/image.jpg",
+        category: "家常菜",
+        ownerUserId: "owner-1",
+        aiNameSuggestion: "番茄牛腩",
+        aiIngredientsSuggestion: "牛腩、番茄、洋葱",
+        createdAt: "2026-06-28T10:20:00.000Z",
+        updatedAt: "2026-06-29T11:30:00.000Z"
+      })
+    ).toEqual({
+      id: "r1",
       title: "番茄牛腩",
       ingredients: "牛腩、番茄、洋葱",
       photoUrl: "cloud://demo/image.jpg",
       category: "家常菜",
       ownerUserId: "owner-1",
       aiNameSuggestion: "番茄牛腩",
-      aiIngredientsSuggestion: "牛腩、番茄、洋葱"
+      aiIngredientsSuggestion: "牛腩、番茄、洋葱",
+      createdAtText: "创建于 2026.06.28",
+      updatedAtText: "更新于 2026.06.29"
     });
   });
 });

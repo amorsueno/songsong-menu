@@ -9,7 +9,7 @@
 检查项：
 - 先执行 `npm run doctor:cloudbase`，确认 cloudbase 模板和云函数目录都通过检查
 - 在微信开发者工具里确认当前选择的是正确的云环境
-- 打开云开发控制台，确认 5 个云函数都已部署成功
+- 打开云开发控制台，确认 8 个云函数都已部署成功
 
 建议操作：
 - 重新部署报错的云函数
@@ -17,12 +17,12 @@
 
 ## 2. 发现页或我的页加载失败
 
-通常是 `getRecipes`、`getMyRecipes` 未部署，或集合权限不匹配。
+通常是 `getRecipes`、`getMyRecipes`、`getRecipeDetail` 未部署，或集合权限不匹配。
 
 检查项：
 - 确认 `recipes` 集合已经创建
 - 确认 `cloudbase/permissions.json` 对应的权限已在控制台配置
-- 检查 `getRecipes` 和 `getMyRecipes` 是否部署到当前云环境
+- 检查 `getRecipes`、`getMyRecipes`、`getRecipeDetail` 是否部署到当前云环境
 
 建议操作：
 - 重新部署列表相关云函数
@@ -30,16 +30,17 @@
 
 ## 3. 上传图片后无法发布
 
-通常是图片没有成功上传到云存储，或 `createRecipe` 云函数未部署。
+通常是图片没有成功上传到云存储，或 `createRecipe`、`updateRecipe`、`deleteRecipe` 云函数未部署。
 
 检查项：
 - 确认选择图片后 `photoUrl` 已成功回填
 - 确认云存储中已经出现对应图片文件
-- 检查 `createRecipe` 云函数是否已部署
+- 检查 `getRecipeDetail`、`updateRecipe`、`deleteRecipe` 是否部署到当前云环境
+- 检查 `createRecipe`、`updateRecipe`、`deleteRecipe` 是否部署到当前云环境
 
 建议操作：
 - 重新上传图片并重试发布
-- 若云函数报错，优先查看 `createRecipe` 的运行日志
+- 若云函数报错，优先查看对应 recipe 云函数的运行日志
 
 ## 4. AI 识别始终没有结果
 
@@ -47,9 +48,7 @@
 
 检查项：
 - 运行 `npm run doctor:cloudbase`，看是否提示缺少 AI 环境变量
-- 确认 `AI_RECOGNIZE_PROVIDER` 是否与当前接入方式匹配
 - 确认 `AI_RECOGNIZE_ENDPOINT` 和 `AI_RECOGNIZE_API_KEY` 已在云开发环境变量中配置
-- 如果使用 `openai_responses`，确认 `AI_RECOGNIZE_MODEL` 也已配置
 - 确认 AI 服务地址本身可访问并能返回 JSON
 
 建议操作：
@@ -68,3 +67,4 @@
 建议操作：
 - 清理开发者工具缓存后重新登录
 - 查看 `login` 云函数日志，确认是否成功返回 user 数据
+

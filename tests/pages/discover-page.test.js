@@ -29,7 +29,9 @@ describe("discover page", () => {
       fetchRecipes = jest.fn();
       mapRecipeCard = jest.fn((item) => ({
         id: item._id,
-        title: item.name
+        title: item.name,
+        summary: item.ingredientsText,
+        photoUrl: item.photoUrl
       }));
 
       return {
@@ -63,9 +65,17 @@ describe("discover page", () => {
     expect(page.data.recipes).toEqual([
       {
         id: "dish-1",
-        title: "番茄炒蛋"
+        title: "番茄炒蛋",
+        summary: undefined,
+        photoUrl: undefined
       }
     ]);
+    expect(page.data.featuredRecipe).toEqual({
+      id: "dish-1",
+      title: "番茄炒蛋",
+      summary: undefined,
+      photoUrl: undefined
+    });
   });
 
   test("loadRecipes sets an error state when the fetch fails", async () => {
@@ -80,6 +90,7 @@ describe("discover page", () => {
 
     expect(page.data.loading).toBe(false);
     expect(page.data.recipes).toEqual([]);
+    expect(page.data.featuredRecipe).toBe(null);
     expect(page.data.errorText).toBe("菜谱加载失败，请稍后重试");
   });
 });

@@ -1,5 +1,6 @@
 describe("my page", () => {
   let pageConfig;
+  let clearUser;
   let requireLogin;
   let fetchMyRecipes;
   let mapRecipeCard;
@@ -13,6 +14,7 @@ describe("my page", () => {
           ...update
         };
       },
+      onLogoutTap: pageConfig.onLogoutTap,
       onShow: pageConfig.onShow
     };
   }
@@ -33,16 +35,24 @@ describe("my page", () => {
       }
     }));
 
+    global.wx = {
+      redirectTo: jest.fn(),
+      showModal: jest.fn()
+    };
+
     jest.doMock("../../services/auth", () => {
+      clearUser = jest.fn();
       requireLogin = jest.fn();
-      return { requireLogin };
+      return { clearUser, requireLogin };
     });
 
     jest.doMock("../../services/recipe", () => {
       fetchMyRecipes = jest.fn();
       mapRecipeCard = jest.fn((item) => ({
         id: item._id,
-        title: item.name
+        title: item.name,
+        summary: item.ingredientsText,
+        photoUrl: item.photoUrl
       }));
 
       return {
@@ -55,6 +65,7 @@ describe("my page", () => {
   afterEach(() => {
     delete global.Page;
     delete global.getApp;
+    delete global.wx;
   });
 
   test("onShow loads current user recipes after login passes", async () => {
@@ -80,9 +91,17 @@ describe("my page", () => {
     expect(page.data.recipes).toEqual([
       {
         id: "dish-1",
-        title: "糖醋排骨"
+        title: "糖醋排骨",
+        summary: undefined,
+        photoUrl: undefined
       }
     ]);
+    expect(page.data.featuredRecipe).toEqual({
+      id: "dish-1",
+      title: "糖醋排骨",
+      summary: undefined,
+      photoUrl: undefined
+    });
   });
 
   test("onShow sets an error state when recipe loading fails", async () => {
@@ -99,6 +118,37 @@ describe("my page", () => {
 
     expect(page.data.loading).toBe(false);
     expect(page.data.recipes).toEqual([]);
+    expect(page.data.featuredRecipe).toBe(null);
     expect(page.data.errorText).toBe("我的菜谱加载失败，请稍后重试");
+  });
+
+  test("onLogoutTap clears login state and returns to login page after confirmation", async () => {
+    require("../../pages/my/my");
+    ({ clearUser } = require("../../services/auth"));
+    const page = createPageInstance();
+    wx.showModal.mockResolvedValue({ confirm: true, cancel: false });
+
+    await page.onLogoutTap.call(page);
+
+    expect(wx.showModal).toHaveBeenCalledWith({
+      title: "退出登录",
+      content: "退出后可重新登录其他账号，确认现在退出吗？"
+    });
+    expect(clearUser).toHaveBeenCalled();
+    expect(wx.redirectTo).toHaveBeenCalledWith({
+      url: "/pages/login/login?redirect=%2Fpages%2Fdiscover%2Fdiscover"
+    });
+  });
+
+  test("onLogoutTap keeps current page when user cancels", async () => {
+    require("../../pages/my/my");
+    ({ clearUser } = require("../../services/auth"));
+    const page = createPageInstance();
+    wx.showModal.mockResolvedValue({ confirm: false, cancel: true });
+
+    await page.onLogoutTap.call(page);
+
+    expect(clearUser).not.toHaveBeenCalled();
+    expect(wx.redirectTo).not.toHaveBeenCalled();
   });
 });

@@ -37,7 +37,9 @@ describe("upload page", () => {
         });
       },
       onCategoryTap: pageConfig.onCategoryTap,
+      getLoginRedirect: pageConfig.getLoginRedirect,
       onLoad: pageConfig.onLoad,
+      onShow: pageConfig.onShow,
       onRecognizeTap: pageConfig.onRecognizeTap,
       onSubmit: pageConfig.onSubmit
     };
@@ -208,6 +210,33 @@ describe("upload page", () => {
       ingredients: "排骨、酱油",
       isPartial: false
     });
+  });
+
+  test("edit mode login guard preserves recipe return path", async () => {
+    require("../../pages/upload/upload");
+    const page = createPageInstance();
+    fetchRecipeDetail.mockResolvedValue({
+      result: {
+        item: {
+          _id: "recipe-1",
+          name: "红烧排骨",
+          ingredientsText: "排骨、酱油",
+          photoUrl: "cloud://demo/recipe.jpg",
+          category: "家常菜"
+        }
+      }
+    });
+
+    await page.onLoad.call(page, {
+      mode: "edit",
+      recipeId: "recipe-1"
+    });
+    page.onShow.call(page);
+
+    expect(requireLogin).toHaveBeenCalledWith(
+      expect.anything(),
+      "/pages/upload/upload?mode=edit&recipeId=recipe-1"
+    );
   });
 
   test("successful recognition autofills editable suggestions", async () => {

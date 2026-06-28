@@ -6,6 +6,7 @@ Page({
     categories: RECIPE_CATEGORIES,
     activeCategory: "全部",
     recipes: [],
+    featuredRecipe: null,
     loading: false,
     errorText: "",
     emptyText: "还没有菜谱，先上传第一道拿手菜吧"
@@ -27,12 +28,15 @@ Page({
 
     try {
       const result = await fetchRecipes(this.data.activeCategory);
+      const recipes = result.result.items.map(mapRecipeCard);
       this.setData({
-        recipes: result.result.items.map(mapRecipeCard)
+        recipes,
+        featuredRecipe: recipes[0] || null
       });
     } catch (error) {
       this.setData({
         recipes: [],
+        featuredRecipe: null,
         errorText: "菜谱加载失败，请稍后重试"
       });
     } finally {

@@ -1,5 +1,6 @@
 describe("login page", () => {
   let pageConfig;
+  let isTabPage;
   let loginWithWechat;
   let saveUser;
   let validateNickname;
@@ -38,10 +39,16 @@ describe("login page", () => {
     }));
 
     jest.doMock("../../services/auth", () => {
+      isTabPage = jest.fn((url) => [
+        "/pages/discover/discover",
+        "/pages/upload/upload",
+        "/pages/my/my"
+      ].includes(url));
       loginWithWechat = jest.fn();
       saveUser = jest.fn();
 
       return {
+        isTabPage,
         loginWithWechat,
         saveUser
       };
@@ -74,6 +81,17 @@ describe("login page", () => {
     expect(page.data.redirect).toBe("/pages/discover/discover");
   });
 
+  test("onLoad decodes protected-page redirect target", () => {
+    require("../../pages/login/login");
+    const page = createPageInstance();
+
+    page.onLoad.call(page, {
+      redirect: "%2Fpages%2Fupload%2Fupload%3Fmode%3Dedit%26recipeId%3Drecipe-1"
+    });
+
+    expect(page.data.redirect).toBe("/pages/upload/upload?mode=edit&recipeId=recipe-1");
+  });
+
   test("successful login to discover uses switchTab", async () => {
     require("../../pages/login/login");
     const page = createPageInstance();
@@ -99,6 +117,25 @@ describe("login page", () => {
     const page = createPageInstance();
 
     page.data.nickname = "淞淞";
+    page.data.redirect = "/pages/upload/upload?mode=edit&recipeId=recipe-1";
+    validateNickname.mockReturnValue({ ok: true });
+    loginWithWechat.mockResolvedValue({
+      result: {
+        user: { nickname: "淞淞" }
+      }
+    });
+
+    await page.onLoginTap.call(page);
+
+    expect(wx.redirectTo).toHaveBeenCalledWith({ url: "/pages/upload/upload?mode=edit&recipeId=recipe-1" });
+    expect(wx.switchTab).not.toHaveBeenCalled();
+  });
+
+  test("successful login back to upload tab uses switchTab", async () => {
+    require("../../pages/login/login");
+    const page = createPageInstance();
+
+    page.data.nickname = "淞淞";
     page.data.redirect = "/pages/upload/upload";
     validateNickname.mockReturnValue({ ok: true });
     loginWithWechat.mockResolvedValue({
@@ -109,7 +146,7 @@ describe("login page", () => {
 
     await page.onLoginTap.call(page);
 
-    expect(wx.redirectTo).toHaveBeenCalledWith({ url: "/pages/upload/upload" });
-    expect(wx.switchTab).not.toHaveBeenCalled();
+    expect(wx.switchTab).toHaveBeenCalledWith({ url: "/pages/upload/upload" });
+    expect(wx.redirectTo).not.toHaveBeenCalled();
   });
 });

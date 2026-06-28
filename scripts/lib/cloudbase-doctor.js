@@ -9,7 +9,10 @@ const REQUIRED_CLOUDFUNCTIONS = [
   "getRecipes",
   "createRecipe",
   "getMyRecipes",
-  "recognizeRecipe"
+  "recognizeRecipe",
+  "getRecipeDetail",
+  "updateRecipe",
+  "deleteRecipe"
 ];
 
 const REQUIRED_AI_ENV_VARS = [
@@ -67,7 +70,7 @@ function runDoctor({ hasPath, env }) {
 
   if (errors.length === 0 && warnings.length === 0) {
     nextSteps.push("可进入微信开发者工具，按 cloudbase 模板创建集合、索引和权限");
-    nextSteps.push("部署 5 个云函数后，执行登录、上传、发现页、我的菜谱四条主流程验收");
+    nextSteps.push("部署 8 个云函数后，执行登录、上传、发现页、我的菜谱、详情编辑删除五条主流程验收");
   }
 
   return {
