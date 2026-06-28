@@ -2,7 +2,11 @@
   <view class="panel login-panel">
     <view class="eyebrow">SONGSONG MENU</view>
     <view class="title">把家常菜谱收进来</view>
-    <view class="hero">品牌菜谱视觉区</view>
+    <view class="subtitle">登录后就能浏览、上传并管理自己的拿手菜。</view>
+    <view class="hero">
+      <view class="hero-title">从第一道家常菜开始建立你的私藏菜单</view>
+      <view class="hero-text">{{registerHint}}</view>
+    </view>
     <input class="input" placeholder="昵称（首次登录填写）" bindinput="onNicknameInput" />
     <view wx:if="{{errorMessage}}" class="error">{{errorMessage}}</view>
     <button class="primary-button login-button" loading="{{loading}}" bindtap="onLoginTap">

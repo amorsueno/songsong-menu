@@ -6,7 +6,8 @@ Page({
     nickname: "",
     loading: false,
     errorMessage: "",
-    redirect: ""
+    redirect: "",
+    registerHint: "首次登录会自动注册账号，后续可直接登录使用。"
   },
 
   onLoad(query) {
