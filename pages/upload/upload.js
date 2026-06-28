@@ -58,10 +58,12 @@ Page({
         aiSuggestion: suggestion,
         "form.name": suggestion.name || this.data.form.name,
         "form.ingredients": suggestion.ingredients || this.data.form.ingredients,
-        aiMessage: suggestion.isPartial ? "识别结果不完整，请手动补充" : "已根据图片自动回填，可继续修改"
+        aiMessage: suggestion.isPartial
+          ? "识别结果不完整，请手动补充缺少的菜名或食材"
+          : "识别完成，已自动回填，你仍可继续修改"
       });
     } catch (error) {
-      this.setData({ aiMessage: "AI识别失败，请手动填写" });
+      this.setData({ aiMessage: "AI识别失败，不影响发布，可手动填写后直接发布" });
     } finally {
       this.setData({ recognizing: false });
     }

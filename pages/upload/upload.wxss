@@ -40,6 +40,17 @@
   font-size: 24rpx;
 }
 
+.ai-note {
+  margin-top: 16rpx;
+  padding: 18rpx 20rpx;
+  border-radius: 18rpx;
+  background: #fff7fa;
+  color: #666666;
+  font-size: 24rpx;
+  line-height: 1.6;
+  border: 1rpx solid #f3dce5;
+}
+
 .input {
   display: block;
   margin-top: 20rpx;
