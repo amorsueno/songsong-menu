@@ -2,6 +2,7 @@
   "pages": [
     "pages/login/login",
     "pages/discover/discover",
+    "pages/recipe-detail/recipe-detail",
     "pages/upload/upload",
     "pages/my/my"
   ],

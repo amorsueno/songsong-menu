@@ -45,6 +45,12 @@ Page({
     await this.loadRecipes();
   },
 
+  onRecipeTap(e) {
+    wx.navigateTo({
+      url: `/pages/recipe-detail/recipe-detail?recipeId=${e.currentTarget.dataset.id}`
+    });
+  },
+
   async onRetryTap() {
     await this.loadRecipes();
   }

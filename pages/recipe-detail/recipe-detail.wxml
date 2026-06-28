@@ -1,0 +1,29 @@
+<view class="page-shell detail-page">
+  <view wx:if="{{loading}}" class="panel detail-state">
+    <view class="detail-state-title">正在加载菜谱</view>
+    <view class="detail-state-text">稍等一下，马上把这道菜的做法信息展示出来。</view>
+  </view>
+
+  <view wx:elif="{{errorText}}" class="panel detail-state">
+    <view class="detail-state-title">加载出了点问题</view>
+    <view class="detail-state-text">{{errorText}}</view>
+    <button class="secondary-button detail-button" bindtap="onRetryTap">重新加载</button>
+  </view>
+
+  <view wx:elif="{{recipe}}" class="detail-content">
+    <image class="detail-image panel" src="{{recipe.photoUrl}}" mode="aspectFill" />
+
+    <view class="panel detail-panel">
+      <view class="detail-meta">{{recipe.category}}</view>
+      <view class="detail-title">{{recipe.title}}</view>
+      <view class="detail-section-title">食材</view>
+      <view class="detail-text">{{recipe.ingredients}}</view>
+    </view>
+
+    <view wx:if="{{recipe.aiNameSuggestion || recipe.aiIngredientsSuggestion}}" class="panel detail-panel">
+      <view class="detail-section-title">AI 识别建议</view>
+      <view wx:if="{{recipe.aiNameSuggestion}}" class="detail-text">菜名：{{recipe.aiNameSuggestion}}</view>
+      <view wx:if="{{recipe.aiIngredientsSuggestion}}" class="detail-text">食材：{{recipe.aiIngredientsSuggestion}}</view>
+    </view>
+  </view>
+</view>

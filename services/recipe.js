@@ -12,6 +12,13 @@ function fetchMyRecipes() {
   });
 }
 
+function fetchRecipeDetail(recipeId) {
+  return wx.cloud.callFunction({
+    name: "getRecipeDetail",
+    data: { recipeId }
+  });
+}
+
 function mapRecipeCard(item) {
   return {
     id: item._id,
@@ -21,8 +28,22 @@ function mapRecipeCard(item) {
   };
 }
 
+function mapRecipeDetail(item) {
+  return {
+    id: item._id,
+    title: item.name,
+    ingredients: item.ingredientsText,
+    photoUrl: item.photoUrl,
+    category: item.category || "家常菜",
+    aiNameSuggestion: item.aiNameSuggestion || "",
+    aiIngredientsSuggestion: item.aiIngredientsSuggestion || ""
+  };
+}
+
 module.exports = {
   fetchRecipes,
   fetchMyRecipes,
-  mapRecipeCard
+  fetchRecipeDetail,
+  mapRecipeCard,
+  mapRecipeDetail
 };

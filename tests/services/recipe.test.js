@@ -4,7 +4,7 @@ global.wx = {
   }
 };
 
-const { fetchRecipes, mapRecipeCard } = require("../../services/recipe");
+const { fetchRecipes, fetchMyRecipes, fetchRecipeDetail, mapRecipeCard, mapRecipeDetail } = require("../../services/recipe");
 
 describe("recipe service", () => {
   test("fetchRecipes requests cloud function with category", async () => {
@@ -33,12 +33,42 @@ describe("recipe service", () => {
   });
 
   test("fetchMyRecipes requests personal recipe function", async () => {
-    const { fetchMyRecipes } = require("../../services/recipe");
     wx.cloud.callFunction.mockResolvedValueOnce({ result: { items: [] } });
     await fetchMyRecipes();
     expect(wx.cloud.callFunction).toHaveBeenCalledWith({
       name: "getMyRecipes",
       data: {}
+    });
+  });
+
+  test("fetchRecipeDetail requests recipe detail function with recipeId", async () => {
+    wx.cloud.callFunction.mockResolvedValueOnce({ result: { item: null } });
+    await fetchRecipeDetail("recipe-1");
+    expect(wx.cloud.callFunction).toHaveBeenCalledWith({
+      name: "getRecipeDetail",
+      data: { recipeId: "recipe-1" }
+    });
+  });
+
+  test("mapRecipeDetail returns detail fields", () => {
+    expect(
+      mapRecipeDetail({
+        _id: "r1",
+        name: "番茄牛腩",
+        ingredientsText: "牛腩、番茄、洋葱",
+        photoUrl: "cloud://demo/image.jpg",
+        category: "家常菜",
+        aiNameSuggestion: "番茄牛腩",
+        aiIngredientsSuggestion: "牛腩、番茄、洋葱"
+      })
+    ).toEqual({
+      id: "r1",
+      title: "番茄牛腩",
+      ingredients: "牛腩、番茄、洋葱",
+      photoUrl: "cloud://demo/image.jpg",
+      category: "家常菜",
+      aiNameSuggestion: "番茄牛腩",
+      aiIngredientsSuggestion: "牛腩、番茄、洋葱"
     });
   });
 });

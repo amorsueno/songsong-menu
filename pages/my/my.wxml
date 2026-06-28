@@ -16,7 +16,7 @@
       <button class="secondary-button state-button" bindtap="onRetryTap">重新加载</button>
     </view>
 
-    <view wx:for="{{recipes}}" wx:key="id" class="panel recipe-card">
+    <view wx:for="{{recipes}}" wx:key="id" class="panel recipe-card" data-id="{{item.id}}" bindtap="onRecipeTap">
       <view class="recipe-title">{{item.title}}</view>
       <view class="recipe-summary">{{item.summary}}</view>
     </view>
