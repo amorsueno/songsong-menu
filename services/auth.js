@@ -9,7 +9,19 @@ function saveUser(app, user) {
   app.globalData.user = user;
 }
 
+function requireLogin(app, redirect) {
+  if (app.globalData.user) {
+    return true;
+  }
+
+  wx.navigateTo({
+    url: `/pages/login/login?redirect=${redirect}`
+  });
+  return false;
+}
+
 module.exports = {
   loginWithWechat,
-  saveUser
+  saveUser,
+  requireLogin
 };

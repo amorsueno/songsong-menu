@@ -30,6 +30,8 @@ npm install
 - `cloudfunctions/getMyRecipes`
 - `cloudfunctions/recognizeRecipe`
 
+每个云函数目录都已包含自己的 `package.json`。如果微信开发者工具提示安装依赖，进入对应目录执行依赖安装后再部署即可。
+
 ## 云开发集合
 
 需要准备两个集合：

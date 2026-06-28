@@ -5,7 +5,14 @@ Page({
   data: {
     nickname: "",
     loading: false,
-    errorMessage: ""
+    errorMessage: "",
+    redirect: ""
+  },
+
+  onLoad(query) {
+    this.setData({
+      redirect: query.redirect || "/pages/discover/discover"
+    });
   },
 
   onNicknameInput(e) {
@@ -24,7 +31,11 @@ Page({
       const app = getApp();
       const result = await loginWithWechat(this.data.nickname);
       saveUser(app, result.result.user);
-      wx.switchTab({ url: "/pages/discover/discover" });
+      if (this.data.redirect === "/pages/discover/discover") {
+        wx.switchTab({ url: this.data.redirect });
+      } else {
+        wx.redirectTo({ url: this.data.redirect });
+      }
     } catch (error) {
       this.setData({ errorMessage: "登录失败，请稍后再试" });
     } finally {

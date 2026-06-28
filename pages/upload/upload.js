@@ -1,3 +1,4 @@
+const { requireLogin } = require("../../services/auth");
 const { validateRecipePayload } = require("../../utils/validators");
 const { chooseRecipeImage, uploadRecipeImage, buildRecipePayload } = require("../../services/upload");
 const { recognizeRecipeFromImage, mapRecognitionResult } = require("../../services/ai");
@@ -18,6 +19,11 @@ Page({
     submitting: false,
     errorMessage: "",
     aiMessage: ""
+  },
+
+  onShow() {
+    const app = getApp();
+    requireLogin(app, "/pages/upload/upload");
   },
 
   onInput(e) {
