@@ -161,6 +161,10 @@
   font-size: 24rpx;
 }
 
+.retry-button {
+  margin-top: 20rpx;
+}
+
 .submit-button {
   margin-top: 24rpx;
 }

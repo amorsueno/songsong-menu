@@ -44,29 +44,35 @@ Page({
         errorMessage: ""
       });
 
-      try {
-        const result = await fetchRecipeDetail(query.recipeId);
-        const recipe = mapRecipeDetail(result.result.item);
+      await this.loadEditRecipe();
+    }
+  },
 
-        this.setData({
-          form: {
-            name: recipe.title,
-            ingredients: recipe.ingredients,
-            photoUrl: recipe.photoUrl,
-            category: recipe.category
-          },
-          aiSuggestion: {
-            name: recipe.aiNameSuggestion,
-            ingredients: recipe.aiIngredientsSuggestion,
-            isPartial: !recipe.aiNameSuggestion || !recipe.aiIngredientsSuggestion
-          }
-        });
-      } catch (error) {
-        this.setData({
-          editLoadFailed: true,
-          errorMessage: "原菜谱加载失败，请返回上一页后重试"
-        });
-      }
+  async loadEditRecipe() {
+    try {
+      const result = await fetchRecipeDetail(this.data.recipeId);
+      const recipe = mapRecipeDetail(result.result.item);
+
+      this.setData({
+        editLoadFailed: false,
+        errorMessage: "",
+        form: {
+          name: recipe.title,
+          ingredients: recipe.ingredients,
+          photoUrl: recipe.photoUrl,
+          category: recipe.category
+        },
+        aiSuggestion: {
+          name: recipe.aiNameSuggestion,
+          ingredients: recipe.aiIngredientsSuggestion,
+          isPartial: !recipe.aiNameSuggestion || !recipe.aiIngredientsSuggestion
+        }
+      });
+    } catch (error) {
+      this.setData({
+        editLoadFailed: true,
+        errorMessage: "原菜谱加载失败，请返回上一页后重试"
+      });
     }
   },
 
@@ -94,6 +100,10 @@ Page({
     this.setData({
       "form.category": e.currentTarget.dataset.category
     });
+  },
+
+  async onRetryEditLoadTap() {
+    await this.loadEditRecipe();
   },
 
   async onChooseImage() {

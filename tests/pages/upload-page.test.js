@@ -38,7 +38,9 @@ describe("upload page", () => {
       },
       onCategoryTap: pageConfig.onCategoryTap,
       getLoginRedirect: pageConfig.getLoginRedirect,
+      loadEditRecipe: pageConfig.loadEditRecipe,
       onLoad: pageConfig.onLoad,
+      onRetryEditLoadTap: pageConfig.onRetryEditLoadTap,
       onChooseImage: pageConfig.onChooseImage,
       onShow: pageConfig.onShow,
       onRecognizeTap: pageConfig.onRecognizeTap,
@@ -215,6 +217,7 @@ describe("upload page", () => {
       ingredients: "排骨、酱油",
       isPartial: false
     });
+    expect(page.data.editLoadFailed).toBe(false);
   });
 
   test("edit mode surfaces a recoverable message when recipe detail loading fails", async () => {
@@ -232,6 +235,42 @@ describe("upload page", () => {
     expect(page.data.editLoadFailed).toBe(true);
     expect(page.data.errorMessage).toBe("原菜谱加载失败，请返回上一页后重试");
     expect(page.data.submitting).toBe(false);
+  });
+
+  test("retrying edit load replaces failure state with recipe data after success", async () => {
+    require("../../pages/upload/upload");
+    const page = createPageInstance();
+
+    fetchRecipeDetail
+      .mockRejectedValueOnce(new Error("network"))
+      .mockResolvedValueOnce({
+        result: {
+          item: {
+            _id: "recipe-1",
+            name: "清炒虾仁",
+            ingredientsText: "虾仁、玉米、黄瓜",
+            photoUrl: "cloud://demo/retry.jpg",
+            category: "轻食",
+            aiNameSuggestion: "清炒虾仁",
+            aiIngredientsSuggestion: "虾仁、玉米、黄瓜"
+          }
+        }
+      });
+
+    await page.onLoad.call(page, {
+      mode: "edit",
+      recipeId: "recipe-1"
+    });
+    await page.onRetryEditLoadTap.call(page);
+
+    expect(page.data.editLoadFailed).toBe(false);
+    expect(page.data.errorMessage).toBe("");
+    expect(page.data.form).toEqual({
+      name: "清炒虾仁",
+      ingredients: "虾仁、玉米、黄瓜",
+      photoUrl: "cloud://demo/retry.jpg",
+      category: "轻食"
+    });
   });
 
   test("edit mode login guard preserves recipe return path", async () => {
