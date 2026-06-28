@@ -34,6 +34,10 @@
   line-height: 1.4;
 }
 
+.detail-button-inline {
+  margin-top: 20rpx;
+}
+
 .detail-section-title {
   margin-top: 24rpx;
   font-size: 28rpx;

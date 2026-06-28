@@ -56,17 +56,19 @@ describe("recipe service", () => {
         _id: "r1",
         name: "番茄牛腩",
         ingredientsText: "牛腩、番茄、洋葱",
-        photoUrl: "cloud://demo/image.jpg",
-        category: "家常菜",
-        aiNameSuggestion: "番茄牛腩",
-        aiIngredientsSuggestion: "牛腩、番茄、洋葱"
-      })
-    ).toEqual({
-      id: "r1",
+      photoUrl: "cloud://demo/image.jpg",
+      category: "家常菜",
+      ownerUserId: "owner-1",
+      aiNameSuggestion: "番茄牛腩",
+      aiIngredientsSuggestion: "牛腩、番茄、洋葱"
+    })
+  ).toEqual({
+    id: "r1",
       title: "番茄牛腩",
       ingredients: "牛腩、番茄、洋葱",
       photoUrl: "cloud://demo/image.jpg",
       category: "家常菜",
+      ownerUserId: "owner-1",
       aiNameSuggestion: "番茄牛腩",
       aiIngredientsSuggestion: "牛腩、番茄、洋葱"
     });

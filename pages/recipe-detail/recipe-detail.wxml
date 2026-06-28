@@ -16,6 +16,7 @@
     <view class="panel detail-panel">
       <view class="detail-meta">{{recipe.category}}</view>
       <view class="detail-title">{{recipe.title}}</view>
+      <button wx:if="{{canEdit}}" class="secondary-button detail-button-inline" data-id="{{recipe.id}}" bindtap="onEditTap">编辑菜谱</button>
       <view class="detail-section-title">食材</view>
       <view class="detail-text">{{recipe.ingredients}}</view>
     </view>

@@ -25,11 +25,24 @@ describe("recipe detail page", () => {
       pageConfig = config;
     };
 
+    global.wx = {
+      navigateTo: jest.fn()
+    };
+
+    global.getApp = jest.fn(() => ({
+      globalData: {
+        user: {
+          openId: "owner-1"
+        }
+      }
+    }));
+
     jest.doMock("../../services/recipe", () => {
       fetchRecipeDetail = jest.fn();
       mapRecipeDetail = jest.fn((item) => ({
         id: item._id,
-        title: item.name
+        title: item.name,
+        ownerUserId: item.ownerUserId
       }));
 
       return {
@@ -41,6 +54,8 @@ describe("recipe detail page", () => {
 
   afterEach(() => {
     delete global.Page;
+    delete global.wx;
+    delete global.getApp;
   });
 
   test("onLoad stores recipeId and loads recipe detail", async () => {
@@ -50,7 +65,8 @@ describe("recipe detail page", () => {
       result: {
         item: {
           _id: "recipe-1",
-          name: "糖醋排骨"
+          name: "糖醋排骨",
+          ownerUserId: "owner-1"
         }
       }
     });
@@ -61,8 +77,10 @@ describe("recipe detail page", () => {
     expect(page.data.recipeId).toBe("recipe-1");
     expect(page.data.recipe).toEqual({
       id: "recipe-1",
-      title: "糖醋排骨"
+      title: "糖醋排骨",
+      ownerUserId: "owner-1"
     });
+    expect(page.data.canEdit).toBe(true);
     expect(page.data.errorText).toBe("");
     expect(page.data.loading).toBe(false);
   });
@@ -78,5 +96,21 @@ describe("recipe detail page", () => {
     expect(page.data.recipe).toBe(null);
     expect(page.data.errorText).toBe("菜谱详情加载失败，请稍后重试");
     expect(page.data.loading).toBe(false);
+  });
+
+  test("onEditTap navigates to upload page in edit mode", () => {
+    require("../../pages/recipe-detail/recipe-detail");
+
+    pageConfig.onEditTap({
+      currentTarget: {
+        dataset: {
+          id: "recipe-1"
+        }
+      }
+    });
+
+    expect(wx.navigateTo).toHaveBeenCalledWith({
+      url: "/pages/upload/upload?mode=edit&recipeId=recipe-1"
+    });
   });
 });

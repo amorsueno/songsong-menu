@@ -35,6 +35,7 @@ function mapRecipeDetail(item) {
     ingredients: item.ingredientsText,
     photoUrl: item.photoUrl,
     category: item.category || "家常菜",
+    ownerUserId: item.ownerUserId || "",
     aiNameSuggestion: item.aiNameSuggestion || "",
     aiIngredientsSuggestion: item.aiIngredientsSuggestion || ""
   };

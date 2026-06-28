@@ -6,6 +6,8 @@ describe("upload page", () => {
   let buildRecipePayload;
   let recognizeRecipeFromImage;
   let mapRecognitionResult;
+  let fetchRecipeDetail;
+  let mapRecipeDetail;
 
   function setValueByPath(target, path, value) {
     const keys = path.split(".");
@@ -35,6 +37,7 @@ describe("upload page", () => {
         });
       },
       onCategoryTap: pageConfig.onCategoryTap,
+      onLoad: pageConfig.onLoad,
       onRecognizeTap: pageConfig.onRecognizeTap,
       onSubmit: pageConfig.onSubmit
     };
@@ -94,6 +97,25 @@ describe("upload page", () => {
         mapRecognitionResult
       };
     });
+
+    jest.doMock("../../services/recipe", () => {
+      fetchRecipeDetail = jest.fn();
+      mapRecipeDetail = jest.fn((item) => ({
+        id: item._id,
+        title: item.name,
+        ingredients: item.ingredientsText,
+        photoUrl: item.photoUrl,
+        category: item.category,
+        aiNameSuggestion: item.aiNameSuggestion || "",
+        aiIngredientsSuggestion: item.aiIngredientsSuggestion || "",
+        ownerUserId: item.ownerUserId || ""
+      }));
+
+      return {
+        fetchRecipeDetail,
+        mapRecipeDetail
+      };
+    });
   });
 
   afterEach(() => {
@@ -145,6 +167,45 @@ describe("upload page", () => {
     expect(pageConfig.data.aiSuggestion).toEqual({
       name: "",
       ingredients: "",
+      isPartial: false
+    });
+  });
+
+  test("edit mode loads existing recipe into form", async () => {
+    require("../../pages/upload/upload");
+    const page = createPageInstance();
+
+    fetchRecipeDetail.mockResolvedValue({
+      result: {
+        item: {
+          _id: "recipe-1",
+          name: "红烧排骨",
+          ingredientsText: "排骨、酱油",
+          photoUrl: "cloud://demo/recipe.jpg",
+          category: "家常菜",
+          aiNameSuggestion: "红烧排骨",
+          aiIngredientsSuggestion: "排骨、酱油"
+        }
+      }
+    });
+
+    await page.onLoad.call(page, {
+      mode: "edit",
+      recipeId: "recipe-1"
+    });
+
+    expect(fetchRecipeDetail).toHaveBeenCalledWith("recipe-1");
+    expect(page.data.mode).toBe("edit");
+    expect(page.data.recipeId).toBe("recipe-1");
+    expect(page.data.form).toEqual({
+      name: "红烧排骨",
+      ingredients: "排骨、酱油",
+      photoUrl: "cloud://demo/recipe.jpg",
+      category: "家常菜"
+    });
+    expect(page.data.aiSuggestion).toEqual({
+      name: "红烧排骨",
+      ingredients: "排骨、酱油",
       isPartial: false
     });
   });
@@ -261,5 +322,39 @@ describe("upload page", () => {
       }
     });
     expect(wx.switchTab).toHaveBeenCalledWith({ url: "/pages/discover/discover" });
+  });
+
+  test("edit submit uses updateRecipe cloud function and redirects to detail page", async () => {
+    require("../../pages/upload/upload");
+    const page = createPageInstance();
+
+    page.data.mode = "edit";
+    page.data.recipeId = "recipe-1";
+    page.data.form = {
+      name: "清炒西兰花",
+      ingredients: "西兰花、蒜末",
+      photoUrl: "cloud://demo/recipe.jpg",
+      category: "轻食"
+    };
+    wx.redirectTo = jest.fn();
+    wx.cloud.callFunction.mockResolvedValue({ result: { recipeId: "recipe-1" } });
+
+    await page.onSubmit.call(page);
+
+    expect(wx.cloud.callFunction).toHaveBeenCalledWith({
+      name: "updateRecipe",
+      data: {
+        recipeId: "recipe-1",
+        name: "清炒西兰花",
+        ingredients: "西兰花、蒜末",
+        photoUrl: "cloud://demo/recipe.jpg",
+        category: "轻食",
+        aiNameSuggestion: "",
+        aiIngredientsSuggestion: ""
+      }
+    });
+    expect(wx.redirectTo).toHaveBeenCalledWith({
+      url: "/pages/recipe-detail/recipe-detail?recipeId=recipe-1"
+    });
   });
 });

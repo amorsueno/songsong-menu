@@ -2,12 +2,15 @@ const { requireLogin } = require("../../services/auth");
 const { validateRecipePayload } = require("../../utils/validators");
 const { chooseRecipeImage, uploadRecipeImage, buildRecipePayload } = require("../../services/upload");
 const { recognizeRecipeFromImage, mapRecognitionResult } = require("../../services/ai");
+const { fetchRecipeDetail, mapRecipeDetail } = require("../../services/recipe");
 const { RECIPE_CATEGORIES } = require("../../utils/constants");
 
 const UPLOAD_CATEGORIES = RECIPE_CATEGORIES.filter((item) => item !== "全部");
 
 Page({
   data: {
+    mode: "create",
+    recipeId: "",
     categories: UPLOAD_CATEGORIES,
     form: {
       name: "",
@@ -24,6 +27,32 @@ Page({
     submitting: false,
     errorMessage: "",
     aiMessage: ""
+  },
+
+  async onLoad(query) {
+    if (query.mode === "edit" && query.recipeId) {
+      this.setData({
+        mode: "edit",
+        recipeId: query.recipeId
+      });
+
+      const result = await fetchRecipeDetail(query.recipeId);
+      const recipe = mapRecipeDetail(result.result.item);
+
+      this.setData({
+        form: {
+          name: recipe.title,
+          ingredients: recipe.ingredients,
+          photoUrl: recipe.photoUrl,
+          category: recipe.category
+        },
+        aiSuggestion: {
+          name: recipe.aiNameSuggestion,
+          ingredients: recipe.aiIngredientsSuggestion,
+          isPartial: !recipe.aiNameSuggestion || !recipe.aiIngredientsSuggestion
+        }
+      });
+    }
   },
 
   onShow() {
@@ -94,14 +123,31 @@ Page({
 
     this.setData({ submitting: true });
     try {
+      const functionName = this.data.mode === "edit" ? "updateRecipe" : "createRecipe";
+      const submitData = {
+        ...payload,
+        aiNameSuggestion: this.data.aiSuggestion.name,
+        aiIngredientsSuggestion: this.data.aiSuggestion.ingredients
+      };
+
+      if (this.data.mode === "edit") {
+        submitData.recipeId = this.data.recipeId;
+      }
+
       await wx.cloud.callFunction({
-        name: "createRecipe",
-        data: {
-          ...payload,
-          aiNameSuggestion: this.data.aiSuggestion.name,
-          aiIngredientsSuggestion: this.data.aiSuggestion.ingredients
-        }
+        name: functionName,
+        data: submitData
       });
+
+      if (this.data.mode === "edit") {
+        this.setData({
+          submitting: false,
+          errorMessage: ""
+        });
+        wx.redirectTo({ url: `/pages/recipe-detail/recipe-detail?recipeId=${this.data.recipeId}` });
+        return;
+      }
+
       this.setData({
         form: {
           name: "",

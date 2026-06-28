@@ -5,7 +5,8 @@ Page({
     recipeId: "",
     recipe: null,
     loading: false,
-    errorText: ""
+    errorText: "",
+    canEdit: false
   },
 
   async onLoad(query) {
@@ -23,13 +24,17 @@ Page({
 
     try {
       const result = await fetchRecipeDetail(this.data.recipeId);
+      const recipe = mapRecipeDetail(result.result.item);
+      const app = getApp();
       this.setData({
-        recipe: mapRecipeDetail(result.result.item)
+        recipe,
+        canEdit: recipe.ownerUserId && app.globalData.user && recipe.ownerUserId === app.globalData.user.openId
       });
     } catch (error) {
       this.setData({
         recipe: null,
-        errorText: "菜谱详情加载失败，请稍后重试"
+        errorText: "菜谱详情加载失败，请稍后重试",
+        canEdit: false
       });
     } finally {
       this.setData({ loading: false });
@@ -38,5 +43,11 @@ Page({
 
   async onRetryTap() {
     await this.loadRecipe();
+  },
+
+  onEditTap(e) {
+    wx.navigateTo({
+      url: `/pages/upload/upload?mode=edit&recipeId=${e.currentTarget.dataset.id}`
+    });
   }
 });
