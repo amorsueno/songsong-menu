@@ -342,6 +342,17 @@ describe("upload page", () => {
     expect(page.data.uploadingImage).toBe(false);
   });
 
+  test("choosing image is ignored while an upload is already in progress", async () => {
+    require("../../pages/upload/upload");
+    const page = createPageInstance();
+    page.data.uploadingImage = true;
+
+    await page.onChooseImage.call(page);
+
+    expect(chooseRecipeImage).not.toHaveBeenCalled();
+    expect(uploadRecipeImage).not.toHaveBeenCalled();
+  });
+
   test("recognize tap is blocked while image is still uploading", async () => {
     require("../../pages/upload/upload");
     const page = createPageInstance();

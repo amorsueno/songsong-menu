@@ -107,6 +107,10 @@ Page({
   },
 
   async onChooseImage() {
+    if (this.data.uploadingImage) {
+      return;
+    }
+
     this.setData({
       uploadingImage: true,
       errorMessage: ""

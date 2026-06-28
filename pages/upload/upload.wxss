@@ -65,6 +65,10 @@
   overflow: hidden;
 }
 
+.upload-box--disabled {
+  opacity: 0.72;
+}
+
 .upload-preview {
   width: 100%;
   height: 100%;
