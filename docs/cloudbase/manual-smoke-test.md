@@ -31,6 +31,8 @@
 - 上传一张菜品照片
 - 点击 `AI识别菜名和食材`
 - 预期结果：
+  - 若 `AI_RECOGNIZE_PROVIDER=generic`，自定义识别服务会收到 `{ photoUrl }`
+  - 若 `AI_RECOGNIZE_PROVIDER=openai_responses`，兼容 Responses API 的服务会收到图片识别请求
   - 若已配置 AI 环境变量，页面出现识别建议
   - 若未配置 AI 环境变量，页面提示可手动填写且不影响发布
 - 手动补齐菜名和食材后点击发布

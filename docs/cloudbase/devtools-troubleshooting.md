@@ -47,7 +47,9 @@
 
 检查项：
 - 运行 `npm run doctor:cloudbase`，看是否提示缺少 AI 环境变量
+- 确认 `AI_RECOGNIZE_PROVIDER` 是否与当前接入方式匹配
 - 确认 `AI_RECOGNIZE_ENDPOINT` 和 `AI_RECOGNIZE_API_KEY` 已在云开发环境变量中配置
+- 如果使用 `openai_responses`，确认 `AI_RECOGNIZE_MODEL` 也已配置
 - 确认 AI 服务地址本身可访问并能返回 JSON
 
 建议操作：
@@ -66,4 +68,3 @@
 建议操作：
 - 清理开发者工具缓存后重新登录
 - 查看 `login` 云函数日志，确认是否成功返回 user 数据
-

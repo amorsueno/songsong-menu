@@ -114,8 +114,17 @@ npm run generate:troubleshooting
 
 `recognizeRecipe` 云函数会读取两个环境变量：
 
+- `AI_RECOGNIZE_PROVIDER`
 - `AI_RECOGNIZE_ENDPOINT`
 - `AI_RECOGNIZE_API_KEY`
+- `AI_RECOGNIZE_MODEL`（仅 `openai_responses` provider 需要）
+
+支持两种 provider：
+
+- `generic`
+  说明：兼容当前自定义识别接口，请求体为 `{ photoUrl }`
+- `openai_responses`
+  说明：向兼容 Responses API 的图片识别接口发送请求，并要求返回 JSON 结果
 
 如果没有配置，AI 识别不会阻塞发布，只会返回空建议值。
 
