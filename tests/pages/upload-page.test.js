@@ -272,6 +272,7 @@ describe("upload page", () => {
     expect(uploadRecipeImage).not.toHaveBeenCalled();
     expect(page.data.form.name).toBe("凉拌黄瓜");
     expect(page.data.errorMessage).toBe("");
+    expect(page.data.uploadingImage).toBe(false);
   });
 
   test("image upload failure shows clear fallback message", async () => {
@@ -285,6 +286,21 @@ describe("upload page", () => {
     expect(uploadRecipeImage).toHaveBeenCalledWith("/tmp/recipe.jpg");
     expect(page.data.form.photoUrl).toBe("");
     expect(page.data.errorMessage).toBe("图片上传失败，请稍后重试");
+    expect(page.data.uploadingImage).toBe(false);
+  });
+
+  test("successful image upload clears error state and finishes uploading mode", async () => {
+    require("../../pages/upload/upload");
+    const page = createPageInstance();
+    page.data.errorMessage = "旧错误";
+    chooseRecipeImage.mockResolvedValue("/tmp/recipe.jpg");
+    uploadRecipeImage.mockResolvedValue("cloud://demo/recipe.jpg");
+
+    await page.onChooseImage.call(page);
+
+    expect(page.data.form.photoUrl).toBe("cloud://demo/recipe.jpg");
+    expect(page.data.errorMessage).toBe("");
+    expect(page.data.uploadingImage).toBe(false);
   });
 
   test("successful recognition autofills editable suggestions", async () => {

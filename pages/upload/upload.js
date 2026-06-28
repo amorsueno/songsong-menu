@@ -27,6 +27,7 @@ Page({
     },
     recognizing: false,
     submitting: false,
+    uploadingImage: false,
     editLoadFailed: false,
     errorMessage: "",
     aiMessage: ""
@@ -96,6 +97,11 @@ Page({
   },
 
   async onChooseImage() {
+    this.setData({
+      uploadingImage: true,
+      errorMessage: ""
+    });
+
     try {
       const tempFilePath = await chooseRecipeImage();
       const photoUrl = await uploadRecipeImage(tempFilePath);
@@ -108,11 +114,18 @@ Page({
     } catch (error) {
       const message = String(error && error.message || "");
       if (message.includes("cancel")) {
+        this.setData({
+          uploadingImage: false
+        });
         return;
       }
 
       this.setData({
         errorMessage: "图片上传失败，请稍后重试"
+      });
+    } finally {
+      this.setData({
+        uploadingImage: false
       });
     }
   },

@@ -9,10 +9,14 @@
     <view class="workspace-card">
       <view class="section-head">
         <view class="section-title">菜品照片</view>
-        <view class="section-note">{{mode === 'edit' ? '可直接替换成新的成品图' : '建议上传清晰的成品图，识别效果会更稳定'}}</view>
+        <view class="section-note">{{uploadingImage ? '正在上传图片到云端，请稍等一下。' : (mode === 'edit' ? '可直接替换成新的成品图' : '建议上传清晰的成品图，识别效果会更稳定')}}</view>
       </view>
       <view class="upload-box" bindtap="onChooseImage">
         <image wx:if="{{form.photoUrl}}" class="upload-preview" src="{{form.photoUrl}}" mode="aspectFill" />
+        <view wx:elif="{{uploadingImage}}" class="upload-placeholder">
+          <view class="upload-placeholder-title">图片上传中</view>
+          <view class="upload-placeholder-text">马上就好，上传完成后会自动回填预览</view>
+        </view>
         <view wx:else class="upload-placeholder">
           <view class="upload-placeholder-title">{{mode === 'edit' ? '点击更换菜品照片' : '点击上传菜品照片'}}</view>
           <view class="upload-placeholder-text">白底优先，尽量保留完整摆盘</view>
