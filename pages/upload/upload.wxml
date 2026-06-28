@@ -29,7 +29,7 @@
         <view class="section-title">AI 辅助识别</view>
         <view class="section-note">AI 只提供建议值，不会锁定你的填写内容</view>
       </view>
-      <button class="secondary-button ai-button" loading="{{recognizing}}" bindtap="onRecognizeTap">
+      <button class="secondary-button ai-button" loading="{{recognizing}}" disabled="{{uploadingImage}}" bindtap="onRecognizeTap">
         AI识别菜名和食材
       </button>
       <view class="ai-note">识别失败或识别不完整都不会阻塞发布，你可以随时手动补充。</view>
@@ -57,7 +57,7 @@
       <input class="input" data-field="ingredients" placeholder="食材，例如：虾仁、鸡蛋、葱花" bindinput="onInput" value="{{form.ingredients}}" />
       <view wx:if="{{errorMessage}}" class="error">{{errorMessage}}</view>
       <button wx:if="{{editLoadFailed}}" class="secondary-button retry-button" bindtap="onRetryEditLoadTap">重新加载原菜谱</button>
-      <button class="primary-button submit-button" loading="{{submitting}}" bindtap="onSubmit">{{submitLabel}}</button>
+      <button class="primary-button submit-button" loading="{{submitting}}" disabled="{{uploadingImage}}" bindtap="onSubmit">{{submitLabel}}</button>
     </view>
   </view>
 </view>

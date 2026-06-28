@@ -141,6 +141,11 @@ Page({
   },
 
   async onRecognizeTap() {
+    if (this.data.uploadingImage) {
+      this.setData({ errorMessage: "图片仍在上传中，请稍后再试" });
+      return;
+    }
+
     if (!this.data.form.photoUrl) {
       this.setData({ errorMessage: "请先上传菜品照片" });
       return;
@@ -170,6 +175,11 @@ Page({
   },
 
   async onSubmit() {
+    if (this.data.uploadingImage) {
+      this.setData({ errorMessage: "图片仍在上传中，请稍后再试" });
+      return;
+    }
+
     if (this.data.editLoadFailed) {
       this.setData({ errorMessage: "原菜谱加载失败，请返回上一页后重试" });
       return;

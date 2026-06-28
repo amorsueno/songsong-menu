@@ -342,6 +342,36 @@ describe("upload page", () => {
     expect(page.data.uploadingImage).toBe(false);
   });
 
+  test("recognize tap is blocked while image is still uploading", async () => {
+    require("../../pages/upload/upload");
+    const page = createPageInstance();
+    page.data.uploadingImage = true;
+    page.data.form.photoUrl = "cloud://demo/recipe.jpg";
+
+    await page.onRecognizeTap.call(page);
+
+    expect(recognizeRecipeFromImage).not.toHaveBeenCalled();
+    expect(page.data.errorMessage).toBe("图片仍在上传中，请稍后再试");
+  });
+
+  test("submit is blocked while image is still uploading", async () => {
+    require("../../pages/upload/upload");
+    const page = createPageInstance();
+    page.data.uploadingImage = true;
+    page.data.form = {
+      name: "清炒时蔬",
+      ingredients: "西兰花、胡萝卜",
+      photoUrl: "cloud://demo/recipe.jpg",
+      category: "轻食"
+    };
+
+    await page.onSubmit.call(page);
+
+    expect(buildRecipePayload).not.toHaveBeenCalled();
+    expect(wx.cloud.callFunction).not.toHaveBeenCalled();
+    expect(page.data.errorMessage).toBe("图片仍在上传中，请稍后再试");
+  });
+
   test("successful recognition autofills editable suggestions", async () => {
     require("../../pages/upload/upload");
     const page = createPageInstance();
