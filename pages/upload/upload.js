@@ -11,6 +11,8 @@ Page({
   data: {
     mode: "create",
     recipeId: "",
+    headerTitle: "上传一道新菜",
+    submitLabel: "发布菜谱",
     categories: UPLOAD_CATEGORIES,
     form: {
       name: "",
@@ -25,6 +27,7 @@ Page({
     },
     recognizing: false,
     submitting: false,
+    editLoadFailed: false,
     errorMessage: "",
     aiMessage: ""
   },
@@ -33,25 +36,36 @@ Page({
     if (query.mode === "edit" && query.recipeId) {
       this.setData({
         mode: "edit",
-        recipeId: query.recipeId
+        recipeId: query.recipeId,
+        headerTitle: "编辑这道菜",
+        submitLabel: "保存修改",
+        editLoadFailed: false,
+        errorMessage: ""
       });
 
-      const result = await fetchRecipeDetail(query.recipeId);
-      const recipe = mapRecipeDetail(result.result.item);
+      try {
+        const result = await fetchRecipeDetail(query.recipeId);
+        const recipe = mapRecipeDetail(result.result.item);
 
-      this.setData({
-        form: {
-          name: recipe.title,
-          ingredients: recipe.ingredients,
-          photoUrl: recipe.photoUrl,
-          category: recipe.category
-        },
-        aiSuggestion: {
-          name: recipe.aiNameSuggestion,
-          ingredients: recipe.aiIngredientsSuggestion,
-          isPartial: !recipe.aiNameSuggestion || !recipe.aiIngredientsSuggestion
-        }
-      });
+        this.setData({
+          form: {
+            name: recipe.title,
+            ingredients: recipe.ingredients,
+            photoUrl: recipe.photoUrl,
+            category: recipe.category
+          },
+          aiSuggestion: {
+            name: recipe.aiNameSuggestion,
+            ingredients: recipe.aiIngredientsSuggestion,
+            isPartial: !recipe.aiNameSuggestion || !recipe.aiIngredientsSuggestion
+          }
+        });
+      } catch (error) {
+        this.setData({
+          editLoadFailed: true,
+          errorMessage: "原菜谱加载失败，请返回上一页后重试"
+        });
+      }
     }
   },
 
@@ -122,6 +136,11 @@ Page({
   },
 
   async onSubmit() {
+    if (this.data.editLoadFailed) {
+      this.setData({ errorMessage: "原菜谱加载失败，请返回上一页后重试" });
+      return;
+    }
+
     const payload = buildRecipePayload(this.data.form);
     const check = validateRecipePayload(payload);
     if (!check.ok) {

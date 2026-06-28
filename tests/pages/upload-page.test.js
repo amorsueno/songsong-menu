@@ -135,6 +135,8 @@ describe("upload page", () => {
       photoUrl: "",
       category: "家常菜"
     });
+    expect(pageConfig.data.headerTitle).toBe("上传一道新菜");
+    expect(pageConfig.data.submitLabel).toBe("发布菜谱");
   });
 
   test("page exposes available upload categories", () => {
@@ -199,6 +201,8 @@ describe("upload page", () => {
     expect(fetchRecipeDetail).toHaveBeenCalledWith("recipe-1");
     expect(page.data.mode).toBe("edit");
     expect(page.data.recipeId).toBe("recipe-1");
+    expect(page.data.headerTitle).toBe("编辑这道菜");
+    expect(page.data.submitLabel).toBe("保存修改");
     expect(page.data.form).toEqual({
       name: "红烧排骨",
       ingredients: "排骨、酱油",
@@ -210,6 +214,23 @@ describe("upload page", () => {
       ingredients: "排骨、酱油",
       isPartial: false
     });
+  });
+
+  test("edit mode surfaces a recoverable message when recipe detail loading fails", async () => {
+    require("../../pages/upload/upload");
+    const page = createPageInstance();
+    fetchRecipeDetail.mockRejectedValue(new Error("network"));
+
+    await page.onLoad.call(page, {
+      mode: "edit",
+      recipeId: "recipe-1"
+    });
+
+    expect(page.data.mode).toBe("edit");
+    expect(page.data.recipeId).toBe("recipe-1");
+    expect(page.data.editLoadFailed).toBe(true);
+    expect(page.data.errorMessage).toBe("原菜谱加载失败，请返回上一页后重试");
+    expect(page.data.submitting).toBe(false);
   });
 
   test("edit mode login guard preserves recipe return path", async () => {

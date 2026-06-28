@@ -1,16 +1,21 @@
 # songsong-menu
 
-淞淞菜谱微信小程序 Phase 1 原型，当前包含：
+淞淞菜谱微信小程序 Phase 1 MVP。
+
+当前已经具备这些能力：
 
 - 微信登录与首次建档
-- 菜谱列表浏览
+- 登录态本地持久化与退出登录
+- 菜谱列表浏览与分类筛选
 - 菜谱上传
 - AI 辅助识别菜名和食材
-- 我的菜谱
+- 菜谱详情查看
+- 我的菜谱管理
+- 菜谱编辑与删除
 
 ## 本地开发
 
-1. 安装依赖
+### 1. 安装项目依赖
 
 ```bash
 npm install
@@ -22,7 +27,7 @@ npm install
 npm run install:cloudfunctions
 ```
 
-2. 生成云开发集合、索引和权限模板：
+### 2. 生成云开发集合、索引和权限模板
 
 ```bash
 npm run generate:cloudbase
@@ -34,7 +39,7 @@ npm run generate:cloudbase
 - `cloudbase/indexes.json`
 - `cloudbase/permissions.json`
 
-3. 运行云开发自检：
+### 3. 运行云开发自检
 
 ```bash
 npm run doctor:cloudbase
@@ -43,32 +48,35 @@ npm run doctor:cloudbase
 这个命令会检查：
 
 - `cloudbase` 模板文件是否齐全
-- 5 个云函数目录是否都带有 `package.json`
+- 8 个云函数目录是否都带有 `package.json`
 - AI 环境变量是否已经准备好
 
-4. 生成微信开发者工具排障清单：
+### 4. 生成微信开发者工具排障清单
 
 ```bash
 npm run generate:troubleshooting
 ```
 
-5. 用微信开发者工具打开项目根目录：
+### 5. 用微信开发者工具打开项目根目录
 
 ```text
 /Users/yu/Documents/GitHub/songsong-menu
 ```
 
-6. 在微信开发者工具中开启云开发，并部署以下云函数目录：
+### 6. 在微信开发者工具中开启云开发，并部署这些云函数
 
 - `cloudfunctions/login`
 - `cloudfunctions/getRecipes`
 - `cloudfunctions/createRecipe`
 - `cloudfunctions/getMyRecipes`
 - `cloudfunctions/recognizeRecipe`
+- `cloudfunctions/getRecipeDetail`
+- `cloudfunctions/updateRecipe`
+- `cloudfunctions/deleteRecipe`
 
 每个云函数目录都已包含自己的 `package.json`。如果微信开发者工具提示安装依赖，进入对应目录执行依赖安装后再部署即可。
 
-7. 在云开发控制台中创建集合、索引并配置权限：
+### 7. 在云开发控制台中创建集合、索引并配置权限
 
 - 按 `cloudbase/collections.json` 创建集合和字段约定
 - 按 `cloudbase/indexes.json` 创建索引
@@ -77,6 +85,16 @@ npm run generate:troubleshooting
 环境变量示例见：
 
 - `.env.example`
+
+### 8. 跑一次主流程验收
+
+建议至少验证这 5 条路径：
+
+1. 登录并进入发现页
+2. 上传菜谱并尝试 AI 识别
+3. 在发现页进入菜谱详情
+4. 在我的页查看自己上传的菜谱
+5. 编辑和删除自己的菜谱
 
 ## 云开发集合
 
@@ -112,7 +130,7 @@ npm run generate:troubleshooting
 
 ## AI 识别配置
 
-`recognizeRecipe` 云函数会读取两个环境变量：
+`recognizeRecipe` 云函数会读取这些环境变量：
 
 - `AI_RECOGNIZE_PROVIDER`
 - `AI_RECOGNIZE_ENDPOINT`
@@ -127,6 +145,22 @@ npm run generate:troubleshooting
   说明：向兼容 Responses API 的图片识别接口发送请求，并要求返回 JSON 结果
 
 如果没有配置，AI 识别不会阻塞发布，只会返回空建议值。
+
+## 页面结构
+
+底部导航：
+
+- `发现`
+- `上传`
+- `我的`
+
+主要页面：
+
+- `pages/login/login`
+- `pages/discover/discover`
+- `pages/upload/upload`
+- `pages/my/my`
+- `pages/recipe-detail/recipe-detail`
 
 ## 测试
 

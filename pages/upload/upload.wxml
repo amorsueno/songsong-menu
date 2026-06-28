@@ -1,18 +1,44 @@
 <view class="page-shell upload-page">
   <view class="panel upload-panel">
-    <view class="title">上传一道新菜</view>
-    <view class="subtitle">先上传成品图，再决定是手动填写还是交给 AI 辅助识别。</view>
-    <view class="upload-box" bindtap="onChooseImage">
-      <image wx:if="{{form.photoUrl}}" class="upload-preview" src="{{form.photoUrl}}" mode="aspectFill" />
-      <view wx:else>点击上传菜品照片</view>
+    <view class="upload-topbar">
+      <view class="mode-badge">{{mode === 'edit' ? '编辑模式' : '新建菜谱'}}</view>
+      <view class="title">{{headerTitle}}</view>
+      <view class="subtitle">{{mode === 'edit' ? '保留原有照片和信息的基础上，继续把这道菜整理得更完整。' : '先上传成品图，再决定是手动填写还是交给 AI 辅助识别。'}}</view>
     </view>
-    <button class="secondary-button" loading="{{recognizing}}" bindtap="onRecognizeTap">
-      AI识别菜名和食材
-    </button>
-    <view class="ai-note">AI 结果仅作填写建议，你仍可手动修改菜名和食材。</view>
-    <view wx:if="{{aiMessage}}" class="ai-tip">{{aiMessage}}</view>
-    <view class="category-label">菜谱分类</view>
-    <view class="category-row">
+
+    <view class="workspace-card">
+      <view class="section-head">
+        <view class="section-title">菜品照片</view>
+        <view class="section-note">{{mode === 'edit' ? '可直接替换成新的成品图' : '建议上传清晰的成品图，识别效果会更稳定'}}</view>
+      </view>
+      <view class="upload-box" bindtap="onChooseImage">
+        <image wx:if="{{form.photoUrl}}" class="upload-preview" src="{{form.photoUrl}}" mode="aspectFill" />
+        <view wx:else class="upload-placeholder">
+          <view class="upload-placeholder-title">{{mode === 'edit' ? '点击更换菜品照片' : '点击上传菜品照片'}}</view>
+          <view class="upload-placeholder-text">白底优先，尽量保留完整摆盘</view>
+        </view>
+      </view>
+    </view>
+
+    <view class="workspace-card ai-card">
+      <view class="section-head">
+        <view class="section-title">AI 辅助识别</view>
+        <view class="section-note">AI 只提供建议值，不会锁定你的填写内容</view>
+      </view>
+      <button class="secondary-button ai-button" loading="{{recognizing}}" bindtap="onRecognizeTap">
+        AI识别菜名和食材
+      </button>
+      <view class="ai-note">识别失败或识别不完整都不会阻塞发布，你可以随时手动补充。</view>
+      <view wx:if="{{aiMessage}}" class="ai-tip">{{aiMessage}}</view>
+    </view>
+
+    <view class="workspace-card form-card">
+      <view class="section-head">
+        <view class="section-title">菜谱信息</view>
+        <view class="section-note">先把核心信息录进去，后续还可以继续编辑整理</view>
+      </view>
+      <view class="category-label">菜谱分类</view>
+      <view class="category-row">
       <view
         wx:for="{{categories}}"
         wx:key="*this"
@@ -22,10 +48,11 @@
       >
         {{item}}
       </view>
+      </view>
+      <input class="input" data-field="name" placeholder="菜名" bindinput="onInput" value="{{form.name}}" />
+      <input class="input" data-field="ingredients" placeholder="食材，例如：虾仁、鸡蛋、葱花" bindinput="onInput" value="{{form.ingredients}}" />
+      <view wx:if="{{errorMessage}}" class="error">{{errorMessage}}</view>
+      <button class="primary-button submit-button" loading="{{submitting}}" bindtap="onSubmit">{{submitLabel}}</button>
     </view>
-    <input class="input" data-field="name" placeholder="菜名" bindinput="onInput" value="{{form.name}}" />
-    <input class="input" data-field="ingredients" placeholder="食材，例如：虾仁、鸡蛋、葱花" bindinput="onInput" value="{{form.ingredients}}" />
-    <view wx:if="{{errorMessage}}" class="error">{{errorMessage}}</view>
-    <button class="primary-button submit-button" loading="{{submitting}}" bindtap="onSubmit">发布菜谱</button>
   </view>
 </view>

@@ -12,6 +12,46 @@
   line-height: 1.6;
 }
 
+.upload-topbar {
+  padding: 8rpx 4rpx 4rpx;
+}
+
+.mode-badge {
+  display: inline-block;
+  padding: 10rpx 18rpx;
+  border-radius: 999rpx;
+  background: #fff1f6;
+  color: #c46f95;
+  font-size: 22rpx;
+  border: 1rpx solid #f3d7e2;
+}
+
+.workspace-card {
+  margin-top: 24rpx;
+  padding: 24rpx;
+  border-radius: 28rpx;
+  background: linear-gradient(180deg, #fffdfd 0%, #fff7fa 100%);
+  border: 1rpx solid #f3dce5;
+}
+
+.section-head {
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
+}
+
+.section-title {
+  font-size: 30rpx;
+  font-weight: 700;
+  color: #111111;
+}
+
+.section-note {
+  color: #777777;
+  font-size: 24rpx;
+  line-height: 1.6;
+}
+
 .upload-box {
   height: 260rpx;
   margin-top: 24rpx;
@@ -30,7 +70,32 @@
   height: 100%;
 }
 
+.upload-placeholder {
+  text-align: center;
+  padding: 0 36rpx;
+}
+
+.upload-placeholder-title {
+  font-size: 28rpx;
+  font-weight: 700;
+  color: #222222;
+}
+
+.upload-placeholder-text {
+  margin-top: 10rpx;
+  color: #666666;
+  font-size: 24rpx;
+}
+
+.ai-card {
+  background: linear-gradient(180deg, #fffafb 0%, #fff4f8 100%);
+}
+
 .secondary-button {
+  margin-top: 20rpx;
+}
+
+.ai-button {
   margin-top: 20rpx;
 }
 
@@ -87,6 +152,7 @@
   border: 1rpx solid #eed8e2;
   border-radius: 20rpx;
   background: #ffffff;
+  box-sizing: border-box;
 }
 
 .error {
