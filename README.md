@@ -16,6 +16,12 @@
 npm install
 ```
 
+如果要一次性安装所有云函数依赖，可以执行：
+
+```bash
+npm run install:cloudfunctions
+```
+
 2. 用微信开发者工具打开项目根目录：
 
 ```text
@@ -31,6 +37,10 @@ npm install
 - `cloudfunctions/recognizeRecipe`
 
 每个云函数目录都已包含自己的 `package.json`。如果微信开发者工具提示安装依赖，进入对应目录执行依赖安装后再部署即可。
+
+环境变量示例见：
+
+- `.env.example`
 
 ## 云开发集合
 
@@ -57,6 +67,10 @@ npm install
 - `category`
 - `createdAt`
 - `updatedAt`
+
+更完整的数据库初始化说明见：
+
+- `docs/cloudbase/database-setup.md`
 
 ## AI 识别配置
 
