@@ -372,6 +372,24 @@ describe("upload page", () => {
     expect(page.data.errorMessage).toBe("图片仍在上传中，请稍后再试");
   });
 
+  test("submit is blocked while ai recognition is running", async () => {
+    require("../../pages/upload/upload");
+    const page = createPageInstance();
+    page.data.recognizing = true;
+    page.data.form = {
+      name: "清炒时蔬",
+      ingredients: "西兰花、胡萝卜",
+      photoUrl: "cloud://demo/recipe.jpg",
+      category: "轻食"
+    };
+
+    await page.onSubmit.call(page);
+
+    expect(buildRecipePayload).not.toHaveBeenCalled();
+    expect(wx.cloud.callFunction).not.toHaveBeenCalled();
+    expect(page.data.errorMessage).toBe("AI识别进行中，请稍候再发布");
+  });
+
   test("successful recognition autofills editable suggestions", async () => {
     require("../../pages/upload/upload");
     const page = createPageInstance();

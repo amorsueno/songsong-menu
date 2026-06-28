@@ -180,6 +180,11 @@ Page({
       return;
     }
 
+    if (this.data.recognizing) {
+      this.setData({ errorMessage: "AI识别进行中，请稍候再发布" });
+      return;
+    }
+
     if (this.data.editLoadFailed) {
       this.setData({ errorMessage: "原菜谱加载失败，请返回上一页后重试" });
       return;

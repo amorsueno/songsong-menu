@@ -57,7 +57,7 @@
       <input class="input" data-field="ingredients" placeholder="食材，例如：虾仁、鸡蛋、葱花" bindinput="onInput" value="{{form.ingredients}}" />
       <view wx:if="{{errorMessage}}" class="error">{{errorMessage}}</view>
       <button wx:if="{{editLoadFailed}}" class="secondary-button retry-button" bindtap="onRetryEditLoadTap">重新加载原菜谱</button>
-      <button class="primary-button submit-button" loading="{{submitting}}" disabled="{{uploadingImage}}" bindtap="onSubmit">{{submitLabel}}</button>
+      <button class="primary-button submit-button" loading="{{submitting}}" disabled="{{uploadingImage || recognizing}}" bindtap="onSubmit">{{submitLabel}}</button>
     </view>
   </view>
 </view>
