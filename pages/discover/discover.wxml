@@ -24,12 +24,24 @@
   </scroll-view>
 
   <view class="recipe-list">
+    <view wx:if="{{loading}}" class="panel state-card">
+      <view class="state-title">正在加载菜谱</view>
+      <view class="state-text">稍等一下，给你整理一份更清爽的菜单。</view>
+    </view>
+
+    <view wx:elif="{{errorText}}" class="panel state-card">
+      <view class="state-title">加载出了点问题</view>
+      <view class="state-text">{{errorText}}</view>
+      <button class="secondary-button state-button" bindtap="onRetryTap">重新加载</button>
+    </view>
+
     <view wx:for="{{recipes}}" wx:key="id" class="panel recipe-card">
       <image class="recipe-image" src="{{item.photoUrl}}" mode="aspectFill" />
       <view class="recipe-title">{{item.title}}</view>
       <view class="recipe-summary">{{item.summary}}</view>
     </view>
-    <view wx:if="{{!loading && recipes.length === 0}}" class="panel empty-card">
+
+    <view wx:if="{{!loading && !errorText && recipes.length === 0}}" class="panel empty-card">
       <view class="empty-title">还没有内容</view>
       <view class="empty-text">{{emptyText}}</view>
     </view>

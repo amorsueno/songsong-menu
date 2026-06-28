@@ -7,6 +7,7 @@ Page({
     activeCategory: "全部",
     recipes: [],
     loading: false,
+    errorText: "",
     emptyText: "还没有菜谱，先上传第一道拿手菜吧"
   },
 
@@ -19,11 +20,20 @@ Page({
   },
 
   async loadRecipes() {
-    this.setData({ loading: true });
+    this.setData({
+      loading: true,
+      errorText: ""
+    });
+
     try {
       const result = await fetchRecipes(this.data.activeCategory);
       this.setData({
         recipes: result.result.items.map(mapRecipeCard)
+      });
+    } catch (error) {
+      this.setData({
+        recipes: [],
+        errorText: "菜谱加载失败，请稍后重试"
       });
     } finally {
       this.setData({ loading: false });
@@ -32,6 +42,10 @@ Page({
 
   async onCategoryTap(e) {
     this.setData({ activeCategory: e.currentTarget.dataset.category });
+    await this.loadRecipes();
+  },
+
+  async onRetryTap() {
     await this.loadRecipes();
   }
 });

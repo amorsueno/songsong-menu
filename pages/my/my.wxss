@@ -25,3 +25,7 @@
 .empty-state {
   text-align: center;
 }
+
+.state-button {
+  margin-top: 24rpx;
+}

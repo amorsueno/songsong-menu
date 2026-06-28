@@ -91,6 +91,26 @@
   text-align: center;
 }
 
+.state-card {
+  padding: 40rpx 32rpx;
+  text-align: center;
+}
+
+.state-title {
+  font-size: 30rpx;
+  font-weight: 700;
+}
+
+.state-text {
+  margin-top: 12rpx;
+  color: #777777;
+  line-height: 1.6;
+}
+
+.state-button {
+  margin-top: 24rpx;
+}
+
 .empty-title {
   font-size: 30rpx;
   font-weight: 700;
