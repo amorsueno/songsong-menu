@@ -8,11 +8,13 @@ async function recognizeRecipeFromImage(photoUrl) {
 function mapRecognitionResult(result) {
   const name = result.name || "";
   const ingredients = result.ingredients || "";
+  const warning = result.warning || "";
 
   return {
     name,
     ingredients,
-    isPartial: !name || !ingredients
+    isPartial: !name || !ingredients,
+    warning
   };
 }
 

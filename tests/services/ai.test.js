@@ -11,7 +11,8 @@ describe("ai recognition mapping", () => {
     expect(mapRecognitionResult({})).toEqual({
       name: "",
       ingredients: "",
-      isPartial: true
+      isPartial: true,
+      warning: ""
     });
   });
 
@@ -24,7 +25,23 @@ describe("ai recognition mapping", () => {
     ).toEqual({
       name: "红烧鸡翅",
       ingredients: "鸡翅、可乐、生姜",
-      isPartial: false
+      isPartial: false,
+      warning: ""
+    });
+  });
+
+  test("warning in recognition result is preserved for UI fallback messaging", () => {
+    expect(
+      mapRecognitionResult({
+        name: "",
+        ingredients: "",
+        warning: "AI response could not be parsed"
+      })
+    ).toEqual({
+      name: "",
+      ingredients: "",
+      isPartial: true,
+      warning: "AI response could not be parsed"
     });
   });
 });

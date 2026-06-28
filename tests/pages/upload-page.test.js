@@ -199,6 +199,29 @@ describe("upload page", () => {
     expect(page.data.aiMessage).toBe("识别结果不完整，请手动补充缺少的菜名或食材");
   });
 
+  test("warning-only recognition result keeps publish unblocked and explains fallback", async () => {
+    require("../../pages/upload/upload");
+    const page = createPageInstance();
+
+    page.data.form.photoUrl = "cloud://demo/recipe.jpg";
+    page.data.form.name = "凉拌黄瓜";
+    mapRecognitionResult.mockReturnValue({
+      name: "",
+      ingredients: "",
+      isPartial: true,
+      warning: "AI response could not be parsed"
+    });
+    recognizeRecipeFromImage.mockResolvedValue({
+      result: { provider: "openai_responses" }
+    });
+
+    await page.onRecognizeTap.call(page);
+
+    expect(page.data.form.name).toBe("凉拌黄瓜");
+    expect(page.data.aiMessage).toBe("AI识别未返回完整结果（AI response could not be parsed），可手动填写后继续发布");
+    expect(page.data.recognizing).toBe(false);
+  });
+
   test("recognition failure does not block later manual submission", async () => {
     require("../../pages/upload/upload");
     const page = createPageInstance();

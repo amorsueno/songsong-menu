@@ -65,13 +65,17 @@ Page({
     try {
       const result = await recognizeRecipeFromImage(this.data.form.photoUrl);
       const suggestion = mapRecognitionResult(result.result);
+      const aiMessage = suggestion.warning
+        ? `AI识别未返回完整结果（${suggestion.warning}），可手动填写后继续发布`
+        : suggestion.isPartial
+          ? "识别结果不完整，请手动补充缺少的菜名或食材"
+          : "识别完成，已自动回填，你仍可继续修改";
+
       this.setData({
         aiSuggestion: suggestion,
         "form.name": suggestion.name || this.data.form.name,
         "form.ingredients": suggestion.ingredients || this.data.form.ingredients,
-        aiMessage: suggestion.isPartial
-          ? "识别结果不完整，请手动补充缺少的菜名或食材"
-          : "识别完成，已自动回填，你仍可继续修改"
+        aiMessage
       });
     } catch (error) {
       this.setData({ aiMessage: "AI识别失败，不影响发布，可手动填写后直接发布" });
