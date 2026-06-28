@@ -96,14 +96,25 @@ Page({
   },
 
   async onChooseImage() {
-    const tempFilePath = await chooseRecipeImage();
-    const photoUrl = await uploadRecipeImage(tempFilePath);
-    this.setData({
-      "form.photoUrl": photoUrl,
-      aiSuggestion: { name: "", ingredients: "", isPartial: false },
-      aiMessage: "",
-      errorMessage: ""
-    });
+    try {
+      const tempFilePath = await chooseRecipeImage();
+      const photoUrl = await uploadRecipeImage(tempFilePath);
+      this.setData({
+        "form.photoUrl": photoUrl,
+        aiSuggestion: { name: "", ingredients: "", isPartial: false },
+        aiMessage: "",
+        errorMessage: ""
+      });
+    } catch (error) {
+      const message = String(error && error.message || "");
+      if (message.includes("cancel")) {
+        return;
+      }
+
+      this.setData({
+        errorMessage: "图片上传失败，请稍后重试"
+      });
+    }
   },
 
   async onRecognizeTap() {

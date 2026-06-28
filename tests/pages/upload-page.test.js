@@ -39,6 +39,7 @@ describe("upload page", () => {
       onCategoryTap: pageConfig.onCategoryTap,
       getLoginRedirect: pageConfig.getLoginRedirect,
       onLoad: pageConfig.onLoad,
+      onChooseImage: pageConfig.onChooseImage,
       onShow: pageConfig.onShow,
       onRecognizeTap: pageConfig.onRecognizeTap,
       onSubmit: pageConfig.onSubmit
@@ -258,6 +259,32 @@ describe("upload page", () => {
       expect.anything(),
       "/pages/upload/upload?mode=edit&recipeId=recipe-1"
     );
+  });
+
+  test("image chooser cancellation keeps upload page state unchanged", async () => {
+    require("../../pages/upload/upload");
+    const page = createPageInstance();
+    page.data.form.name = "凉拌黄瓜";
+    chooseRecipeImage.mockRejectedValue(new Error("choose canceled"));
+
+    await page.onChooseImage.call(page);
+
+    expect(uploadRecipeImage).not.toHaveBeenCalled();
+    expect(page.data.form.name).toBe("凉拌黄瓜");
+    expect(page.data.errorMessage).toBe("");
+  });
+
+  test("image upload failure shows clear fallback message", async () => {
+    require("../../pages/upload/upload");
+    const page = createPageInstance();
+    chooseRecipeImage.mockResolvedValue("/tmp/recipe.jpg");
+    uploadRecipeImage.mockRejectedValue(new Error("upload failed"));
+
+    await page.onChooseImage.call(page);
+
+    expect(uploadRecipeImage).toHaveBeenCalledWith("/tmp/recipe.jpg");
+    expect(page.data.form.photoUrl).toBe("");
+    expect(page.data.errorMessage).toBe("图片上传失败，请稍后重试");
   });
 
   test("successful recognition autofills editable suggestions", async () => {
