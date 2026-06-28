@@ -5,7 +5,8 @@
   "scripts": {
     "test": "jest --runInBand",
     "install:cloudfunctions": "bash scripts/install-cloudfunctions.sh",
-    "generate:cloudbase": "node scripts/generate-cloudbase-config.js"
+    "generate:cloudbase": "node scripts/generate-cloudbase-config.js",
+    "doctor:cloudbase": "node scripts/cloudbase-doctor.js"
   },
   "devDependencies": {
     "jest-environment-jsdom": "^29.7.0",

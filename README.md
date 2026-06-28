@@ -34,13 +34,25 @@ npm run generate:cloudbase
 - `cloudbase/indexes.json`
 - `cloudbase/permissions.json`
 
-3. 用微信开发者工具打开项目根目录：
+3. 运行云开发自检：
+
+```bash
+npm run doctor:cloudbase
+```
+
+这个命令会检查：
+
+- `cloudbase` 模板文件是否齐全
+- 5 个云函数目录是否都带有 `package.json`
+- AI 环境变量是否已经准备好
+
+4. 用微信开发者工具打开项目根目录：
 
 ```text
 /Users/yu/Documents/GitHub/songsong-menu
 ```
 
-4. 在微信开发者工具中开启云开发，并部署以下云函数目录：
+5. 在微信开发者工具中开启云开发，并部署以下云函数目录：
 
 - `cloudfunctions/login`
 - `cloudfunctions/getRecipes`
@@ -50,7 +62,7 @@ npm run generate:cloudbase
 
 每个云函数目录都已包含自己的 `package.json`。如果微信开发者工具提示安装依赖，进入对应目录执行依赖安装后再部署即可。
 
-5. 在云开发控制台中创建集合、索引并配置权限：
+6. 在云开发控制台中创建集合、索引并配置权限：
 
 - 按 `cloudbase/collections.json` 创建集合和字段约定
 - 按 `cloudbase/indexes.json` 创建索引
@@ -89,6 +101,7 @@ npm run generate:cloudbase
 更完整的数据库初始化说明见：
 
 - `docs/cloudbase/database-setup.md`
+- `docs/cloudbase/manual-smoke-test.md`
 
 ## AI 识别配置
 
